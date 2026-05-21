@@ -45,6 +45,12 @@ public class FrmPrincipal extends JFrame{
 		btnEstudiante.setFocusable(false);
 		panel.add(btnEstudiante);
 		
+		btnEstudiante.addActionListener(e -> {
+
+			FormEstudiante frm = new FormEstudiante();
+			frm.setVisible(true);
+
+		});
 		
 		
 		JButton btnCursos = new JButton("Cursos");
@@ -56,6 +62,13 @@ public class FrmPrincipal extends JFrame{
 		btnCursos.setFocusable(false);
 		panel.add(btnCursos);
 		
+		btnCursos.addActionListener(e -> {
+
+			FormCurso frm = new FormCurso();
+			frm.setVisible(true);
+
+		});
+		
 		JButton btnEvaluacion = new JButton("Evaluaciones");
 		btnEvaluacion.setBounds(300, 340, 320, 55);
 		btnEvaluacion.setFont(new Font("Arial", Font.BOLD, 18));
@@ -65,6 +78,7 @@ public class FrmPrincipal extends JFrame{
 		btnEvaluacion.setFocusable(false);
 		panel.add(btnEvaluacion);
 		
+		
 		JButton btnInscripcion = new JButton("Inscripciones");
 		btnInscripcion.setBounds(300, 420, 320, 55);
 		btnInscripcion.setFont(new Font("Arial", Font.BOLD, 18));
@@ -73,6 +87,13 @@ public class FrmPrincipal extends JFrame{
 		btnInscripcion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		btnInscripcion.setFocusable(false);
 		panel.add(btnInscripcion);
+		
+		btnInscripcion.addActionListener(e -> {
+
+			FrmInscripcion frm = new FrmInscripcion();
+			frm.setVisible(true);
+
+		});
 		
 		JButton btnExamenEscrito = new JButton("Examen Escrito");
 		btnExamenEscrito.setBounds(300, 500, 320, 55);
