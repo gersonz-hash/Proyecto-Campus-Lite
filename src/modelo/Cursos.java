@@ -1,12 +1,12 @@
 package modelo;
 
 public class Cursos {
-	private String codigo, nombre;
+	private String codigo, nombreCarrera;
 	private int creditos, cupo;
 	
 	public Cursos(String codigo, String nombre, int creditos, int cupo) {
 		this.codigo = codigo;
-		this.nombre = nombre;
+		this.nombreCarrera = nombre;
 		this.creditos = creditos;
 		this.cupo = cupo;
 	}
@@ -21,11 +21,11 @@ public class Cursos {
 	}
 
 	public String getNombre() {
-		return nombre;
+		return nombreCarrera;
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		this.nombreCarrera = nombre;
 	}
 
 	public int getCreditos() {
@@ -43,14 +43,5 @@ public class Cursos {
 	public void setCupo(int cupo) {
 		this.cupo = cupo;
 	}
-	public void mostrar() {
-		System.out.println("Código: "+codigo);
-		System.out.println("Nombre: "+nombre);
-		System.out.println("Creditos: "+creditos);
-		System.out.println("Cupo: "+cupo);
-		
-	}
-	
-	
 
 }

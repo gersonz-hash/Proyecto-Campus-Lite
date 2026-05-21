@@ -7,7 +7,7 @@ public class Estudiante {
     private String apellidos;
     private String correo;
 
-    // CONSTRUCTOR
+    //CONSTRUCTOR
 
     public Estudiante(String carnet, String nombre, String apellidos, String correo) {
 
@@ -18,7 +18,7 @@ public class Estudiante {
 
     }
 
-    // GETTERS Y SETTERS
+    //GETTERS Y SETTERS
 
     public String getCarnet() {
         return carnet;
@@ -50,17 +50,6 @@ public class Estudiante {
 
     public void setCorreo(String correo) {
         this.correo = correo;
-    }
-
-    // METODO MOSTRAR
-
-    public void mostrar() {
-
-        System.out.println("Carnet: " + carnet);
-        System.out.println("Nombre: " + nombre);
-        System.out.println("Apellidos: " + apellidos);
-        System.out.println("Correo: " + correo);
-
     }
 
 }

@@ -1,123 +1,129 @@
 package vista;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import java.awt.Font;
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 
-public class FrmPrincipal extends JFrame{
-	
-	private JPanel panel;
-	
-	public FrmPrincipal() {
-		
-		setTitle(" Campus Lite ");
-		setSize(950, 700);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(false);
-		
-		panel = new JPanel();
-		panel.setLayout(null);
-		panel.setBackground(new Color (230, 230, 230));
-		
-		agregarComponentes();
-		
-		add(panel);
-	}
-	private void agregarComponentes() {
-		
-		JLabel titulo = new JLabel(" CAMPUS LITE ");
-		titulo.setBounds(345, 40, 500, 65);
-		titulo.setFont(new Font(" Arial", Font.BOLD, 25));
-		titulo.setForeground(Color.BLACK);
-		panel.add(titulo);
-		
-		JButton btnEstudiante = new JButton("Estudiantes");
-		btnEstudiante.setBounds(300, 180, 320, 55);
-		btnEstudiante.setFont(new Font("Arial", Font.BOLD, 18));
-		btnEstudiante.setForeground(Color.BLACK);
-		btnEstudiante.setBackground(Color.WHITE);
-		btnEstudiante.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		btnEstudiante.setFocusable(false);
-		panel.add(btnEstudiante);
-		
-		btnEstudiante.addActionListener(e -> {
+public class FrmPrincipal extends JFrame {
 
-			FormEstudiante frm = new FormEstudiante();
-			frm.setVisible(true);
+    private JPanel panel;
 
-		});
-		
-		
-		JButton btnCursos = new JButton("Cursos");
-		btnCursos.setBounds(300, 260, 320, 55);
-		btnCursos.setFont(new Font("Arial", Font.BOLD, 18));
-		btnCursos.setForeground(Color.BLACK);
-		btnCursos.setBackground(Color.WHITE);
-		btnCursos.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		btnCursos.setFocusable(false);
-		panel.add(btnCursos);
-		
-		btnCursos.addActionListener(e -> {
+    public FrmPrincipal() {
 
-			FormCurso frm = new FormCurso();
-			frm.setVisible(true);
+        setTitle("Campus Lite");
+        setSize(950, 700);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
 
-		});
-		
-		JButton btnEvaluacion = new JButton("Evaluaciones");
-		btnEvaluacion.setBounds(300, 340, 320, 55);
-		btnEvaluacion.setFont(new Font("Arial", Font.BOLD, 18));
-		btnEvaluacion.setForeground(Color.BLACK);
-		btnEvaluacion.setBackground(Color.WHITE);
-		btnEvaluacion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		btnEvaluacion.setFocusable(false);
-		panel.add(btnEvaluacion);
-		
-		
-		JButton btnInscripcion = new JButton("Inscripciones");
-		btnInscripcion.setBounds(300, 420, 320, 55);
-		btnInscripcion.setFont(new Font("Arial", Font.BOLD, 18));
-		btnInscripcion.setForeground(Color.BLACK);
-		btnInscripcion.setBackground(Color.WHITE);
-		btnInscripcion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		btnInscripcion.setFocusable(false);
-		panel.add(btnInscripcion);
-		
-		btnInscripcion.addActionListener(e -> {
+        panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBackground(new Color(20, 33, 61)); // 🔵 azul oscuro moderno
 
-			FrmInscripcion frm = new FrmInscripcion();
-			frm.setVisible(true);
+        agregarComponentes();
 
-		});
-		
-		JButton btnExamenEscrito = new JButton("Examen Escrito");
-		btnExamenEscrito.setBounds(300, 500, 320, 55);
-		btnExamenEscrito.setFont(new Font("Arial", Font.BOLD, 18));
-		btnExamenEscrito.setForeground(Color.BLACK);
-		btnExamenEscrito.setBackground(Color.WHITE);
-		btnExamenEscrito.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		btnExamenEscrito.setFocusable(false);
-		panel.add(btnExamenEscrito);
-		
-		JButton btnSalir = new JButton("Salir");
-		btnSalir.setBounds(300, 580, 320, 55);
-		btnSalir.setFont(new Font("Arial", Font.BOLD, 18));
-		btnSalir.setForeground(Color.BLACK);
-		btnSalir.setBackground(Color.WHITE);
-		btnSalir.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		btnSalir.setFocusable(false);
-		panel.add(btnSalir);
-		
-		btnSalir.addActionListener(e -> {
+        add(panel);
+    }
 
-			System.exit(0);
+    private void agregarComponentes() {
 
-		});
-	}
+        //TÍTULO
+        JLabel titulo = new JLabel("CAMPUS LITE");
+        titulo.setBounds(330, 40, 500, 65);
+        titulo.setFont(new Font("Arial", Font.BOLD, 30));
+        titulo.setForeground(Color.WHITE);
+        panel.add(titulo);
 
+        //SUBTÍTULO
+        JLabel subtitulo = new JLabel("SISTEMA DE GESTIÓN DE ESTUDIANTES");
+        subtitulo.setBounds(300, 90, 600, 30);
+        subtitulo.setFont(new Font("Arial", Font.PLAIN, 16));
+        subtitulo.setForeground(new Color(200, 200, 200));
+        panel.add(subtitulo);
+
+        //BOTONES
+        JButton btnEstudiante = crearBoton("Estudiantes", 180);
+        panel.add(btnEstudiante);
+
+        JButton btnCursos = crearBoton("Cursos", 260);
+        panel.add(btnCursos);
+
+        JButton btnEvaluacion = crearBoton("Evaluaciones", 340);
+        panel.add(btnEvaluacion);
+
+        JButton btnInscripcion = crearBoton("Inscripciones", 420);
+        panel.add(btnInscripcion);
+
+        JButton btnExamen = crearBoton("Examen Escrito", 500);
+        panel.add(btnExamen);
+
+        JButton btnSalir = crearBotonSalir("Salir", 580);
+        panel.add(btnSalir);
+
+        //ACCIONES
+
+        btnEstudiante.addActionListener(e -> new FormEstudiante().setVisible(true));
+
+        btnCursos.addActionListener(e -> new FormCurso().setVisible(true));
+
+        btnInscripcion.addActionListener(e -> new FrmInscripcion().setVisible(true));
+
+        btnSalir.addActionListener(e -> System.exit(0));
+    }
+
+    //BOTÓN NORMAL BONITO
+    private JButton crearBoton(String texto, int y) {
+
+        JButton btn = new JButton(texto);
+        btn.setBounds(300, y, 320, 55);
+        btn.setFont(new Font("Arial", Font.BOLD, 18));
+
+        btn.setBackground(new Color(255, 255, 255));
+        btn.setForeground(new Color(20, 33, 61));
+        btn.setBorder(BorderFactory.createLineBorder(new Color(0, 168, 232), 2));
+        btn.setFocusable(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        //efecto hover
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn.setBackground(new Color(0, 168, 232));
+                btn.setForeground(Color.WHITE);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn.setBackground(Color.WHITE);
+                btn.setForeground(new Color(20, 33, 61));
+            }
+        });
+
+        return btn;
+    }
+
+    //BOTÓN SALIR
+    private JButton crearBotonSalir(String texto, int y) {
+
+        JButton btn = new JButton(texto);
+        btn.setBounds(300, y, 320, 55);
+        btn.setFont(new Font("Arial", Font.BOLD, 18));
+
+        btn.setBackground(new Color(220, 20, 60));
+        btn.setForeground(Color.WHITE);
+        btn.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        btn.setFocusable(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn.setBackground(new Color(255, 50, 80));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn.setBackground(new Color(220, 20, 60));
+            }
+        });
+
+        return btn;
+    }
 }

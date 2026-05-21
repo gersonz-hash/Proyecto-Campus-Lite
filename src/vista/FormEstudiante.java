@@ -2,14 +2,10 @@ package vista;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
+
 import javax.swing.table.DefaultTableModel;
 
 import modelo.Estudiante;
@@ -39,6 +35,8 @@ public class FormEstudiante extends JFrame implements ActionListener {
     JScrollPane scroll;
 
     int filaSeleccionada = -1;
+
+    ArrayList<Estudiante> listaEstudiantes = new ArrayList<>();
 
     public FormEstudiante() {
 
@@ -92,7 +90,6 @@ public class FormEstudiante extends JFrame implements ActionListener {
         btnLimpiar.setBounds(180, 290, 100, 40);
         add(btnLimpiar);
 
-        // 🔥 BOTÓN MENU AGREGADO
         btnMenu = new JButton("Menu");
         btnMenu.setBounds(310, 290, 100, 40);
         add(btnMenu);
@@ -106,18 +103,14 @@ public class FormEstudiante extends JFrame implements ActionListener {
         add(btnEliminar);
 
         modeloTabla = new DefaultTableModel();
-
         modeloTabla.addColumn("Carnet");
         modeloTabla.addColumn("Nombre");
         modeloTabla.addColumn("Apellidos");
         modeloTabla.addColumn("Correo");
 
         tablaEstudiantes = new JTable(modeloTabla);
-
         scroll = new JScrollPane(tablaEstudiantes);
-
         scroll.setBounds(20, 400, 500, 120);
-
         add(scroll);
 
         tablaEstudiantes.getSelectionModel().addListSelectionListener(e -> {
@@ -125,7 +118,6 @@ public class FormEstudiante extends JFrame implements ActionListener {
             filaSeleccionada = tablaEstudiantes.getSelectedRow();
 
             if (filaSeleccionada >= 0) {
-
                 txtCarnet.setText(modeloTabla.getValueAt(filaSeleccionada, 0).toString());
                 txtNombre.setText(modeloTabla.getValueAt(filaSeleccionada, 1).toString());
                 txtApellidos.setText(modeloTabla.getValueAt(filaSeleccionada, 2).toString());
@@ -137,8 +129,6 @@ public class FormEstudiante extends JFrame implements ActionListener {
         btnLimpiar.addActionListener(this);
         btnEditar.addActionListener(this);
         btnEliminar.addActionListener(this);
-
-        // 🔥 IMPORTANTE: agregar listener del menú
         btnMenu.addActionListener(this);
 
         setVisible(true);
@@ -147,12 +137,6 @@ public class FormEstudiante extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == btnMenu) {
-
-            this.dispose(); // cerrar ventana actual
-            new FrmPrincipal(); // volver al menú
-        }
-
         if (e.getSource() == btnGuardar) {
 
             String carnet = txtCarnet.getText();
@@ -160,42 +144,33 @@ public class FormEstudiante extends JFrame implements ActionListener {
             String apellidos = txtApellidos.getText();
             String correo = txtCorreo.getText();
 
-            if (carnet.isEmpty() || nombre.isEmpty()
-                    || apellidos.isEmpty() || correo.isEmpty()) {
-
-                JOptionPane.showMessageDialog(null,
-                        "No deje campos vacios");
+            if (carnet.isEmpty() || nombre.isEmpty() || apellidos.isEmpty() || correo.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No deje campos vacios");
                 return;
             }
 
             if (!carnet.matches("\\d{4}-\\d{2}-\\d{4}")) {
-                JOptionPane.showMessageDialog(null,
-                        "Formato de carnet invalido. Ejemplo: 0905-25-2522");
+                JOptionPane.showMessageDialog(null, "Carnet invalido");
                 return;
             }
 
             if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-                JOptionPane.showMessageDialog(null,
-                        "El nombre solo debe contener letras");
+                JOptionPane.showMessageDialog(null, "Nombre invalido");
                 return;
             }
 
-            if (!apellidos.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-                JOptionPane.showMessageDialog(null,
-                        "Los apellidos solo deben contener letras");
-                return;
-            }
+            Estudiante e1 = new Estudiante(carnet, nombre, apellidos, correo);
+
+            listaEstudiantes.add(e1);
 
             modeloTabla.addRow(new Object[]{
-                carnet,
-                nombre,
-                apellidos,
-                correo
+                e1.getCarnet(),
+                e1.getNombre(),
+                e1.getApellidos(),
+                e1.getCorreo()
             });
 
-            JOptionPane.showMessageDialog(null,
-                    "Estudiante guardado correctamente");
-
+            JOptionPane.showMessageDialog(null, "Estudiante guardado");
             limpiar();
         }
 
@@ -203,12 +178,19 @@ public class FormEstudiante extends JFrame implements ActionListener {
 
             if (filaSeleccionada >= 0) {
 
-                modeloTabla.setValueAt(txtCarnet.getText(), filaSeleccionada, 0);
-                modeloTabla.setValueAt(txtNombre.getText(), filaSeleccionada, 1);
-                modeloTabla.setValueAt(txtApellidos.getText(), filaSeleccionada, 2);
-                modeloTabla.setValueAt(txtCorreo.getText(), filaSeleccionada, 3);
+                Estudiante e1 = listaEstudiantes.get(filaSeleccionada);
 
-                JOptionPane.showMessageDialog(null, "Estudiante actualizado");
+                e1.setCarnet(txtCarnet.getText());
+                e1.setNombre(txtNombre.getText());
+                e1.setApellidos(txtApellidos.getText());
+                e1.setCorreo(txtCorreo.getText());
+
+                modeloTabla.setValueAt(e1.getCarnet(), filaSeleccionada, 0);
+                modeloTabla.setValueAt(e1.getNombre(), filaSeleccionada, 1);
+                modeloTabla.setValueAt(e1.getApellidos(), filaSeleccionada, 2);
+                modeloTabla.setValueAt(e1.getCorreo(), filaSeleccionada, 3);
+
+                JOptionPane.showMessageDialog(null, "Actualizado");
             }
         }
 
@@ -216,15 +198,21 @@ public class FormEstudiante extends JFrame implements ActionListener {
 
             if (filaSeleccionada >= 0) {
 
+                listaEstudiantes.remove(filaSeleccionada);
                 modeloTabla.removeRow(filaSeleccionada);
 
-                JOptionPane.showMessageDialog(null, "Estudiante eliminado");
+                JOptionPane.showMessageDialog(null, "Eliminado");
                 limpiar();
             }
         }
 
         if (e.getSource() == btnLimpiar) {
             limpiar();
+        }
+
+        if (e.getSource() == btnMenu) {
+            this.dispose();
+            new FrmPrincipal();
         }
     }
 
