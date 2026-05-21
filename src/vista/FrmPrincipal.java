@@ -15,7 +15,7 @@ public class FrmPrincipal extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
-        panel = new JPanel();
+        panel = new JPanel();	
         panel.setLayout(null);
         panel.setBackground(new Color(20, 33, 61)); // 🔵 azul oscuro moderno
 
@@ -53,7 +53,7 @@ public class FrmPrincipal extends JFrame {
         JButton btnInscripcion = crearBoton("Inscripciones", 420);
         panel.add(btnInscripcion);
 
-        JButton btnExamen = crearBoton("Examen Escrito", 500);
+        JButton btnExamen = crearBoton("Reportes", 500);
         panel.add(btnExamen);
 
         JButton btnSalir = crearBotonSalir("Salir", 580);
@@ -64,6 +64,8 @@ public class FrmPrincipal extends JFrame {
         btnEstudiante.addActionListener(e -> new FormEstudiante().setVisible(true));
 
         btnCursos.addActionListener(e -> new FormCurso().setVisible(true));
+
+        btnEvaluacion.addActionListener(e -> new FrmEvaluacion().setVisible(true));
 
         btnInscripcion.addActionListener(e -> new FrmInscripcion().setVisible(true));
 
@@ -77,8 +79,8 @@ public class FrmPrincipal extends JFrame {
         btn.setBounds(300, y, 320, 55);
         btn.setFont(new Font("Arial", Font.BOLD, 18));
 
-        btn.setBackground(new Color(255, 255, 255));
-        btn.setForeground(new Color(20, 33, 61));
+        btn.setBackground(new Color(20, 33, 61));
+        btn.setForeground(Color.WHITE);
         btn.setBorder(BorderFactory.createLineBorder(new Color(0, 168, 232), 2));
         btn.setFocusable(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -92,8 +94,8 @@ public class FrmPrincipal extends JFrame {
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn.setBackground(Color.WHITE);
-                btn.setForeground(new Color(20, 33, 61));
+                btn.setBackground(new Color(20, 33, 61));
+                btn.setForeground(Color.WHITE);
             }
         });
 

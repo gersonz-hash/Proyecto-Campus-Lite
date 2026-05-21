@@ -43,7 +43,7 @@ public class FormEstudiante extends JFrame implements ActionListener {
         setTitle("Formulario Estudiante");
         setSize(550, 600);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
 
         lblTitulo = new JLabel("ESTUDIANTES");

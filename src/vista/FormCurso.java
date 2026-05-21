@@ -50,7 +50,7 @@ public class FormCurso extends JFrame implements ActionListener {
         setTitle("Formulario Curso");
         setSize(550, 600);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
 
         lblTitulo = new JLabel("CURSOS");
