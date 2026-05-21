@@ -1,67 +1,66 @@
 package modelo;
-import java.time.LocalDate;
 
 public class Estudiante {
-	private  String carnet, nombre, apellidos, correo;
-	private LocalDate fechaNacimiento;
-	
-	
-	
-	public Estudiante(String carnet, String nombre, String apellidos, String correo, LocalDate fechaNacimiento) {
-		this.carnet = carnet;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.correo = correo;
-		this.fechaNacimiento = fechaNacimiento;
-	}
 
-	public String getCarnet() {
-		return carnet;
-	}
+    private String carnet;
+    private String nombre;
+    private String apellidos;
+    private String correo;
 
-	public void setCarnet(String carnet) {
-		this.carnet = carnet;
-	}
+    // CONSTRUCTOR
 
-	public String getNombre() {
-		return nombre;
-	}
+    public Estudiante(String carnet, String nombre, String apellidos, String correo) {
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+        this.carnet = carnet;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.correo = correo;
 
-	public String getApellidos() {
-		return apellidos;
-	}
+    }
 
-	public void setApellidos(String apellidos) {
-		this.apellidos = apellidos;
-	}
+    // GETTERS Y SETTERS
 
-	public String getCorreo() {
-		return correo;
-	}
+    public String getCarnet() {
+        return carnet;
+    }
 
-	public void setCorreo(String correo) {
-		this.correo = correo;
-	}
+    public void setCarnet(String carnet) {
+        this.carnet = carnet;
+    }
 
+    public String getNombre() {
+        return nombre;
+    }
 
-	public LocalDate getFechaNacimiento() {
-		return fechaNacimiento;
-	}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	public void setFechaNacimiento(LocalDate fechaNacimiento) {
-		this.fechaNacimiento = fechaNacimiento;
-	}
+    public String getApellidos() {
+        return apellidos;
+    }
 
-	public void mostrar() {
-		System.out.println("Carnet: "+carnet);
-		System.out.println("Nombre: "+nombre);
-		System.out.println("Apellidos: "+apellidos);
-		System.out.println("Correo: "+correo);
-	}
-	
-	
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    // METODO MOSTRAR
+
+    public void mostrar() {
+
+        System.out.println("Carnet: " + carnet);
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Apellidos: " + apellidos);
+        System.out.println("Correo: " + correo);
+
+    }
+
 }
