@@ -5,9 +5,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
-
 import javax.swing.table.DefaultTableModel;
 
+import modelo.Datos;
 import modelo.Estudiante;
 
 public class FormEstudiante extends JFrame implements ActionListener {
@@ -163,6 +163,8 @@ public class FormEstudiante extends JFrame implements ActionListener {
 
             listaEstudiantes.add(e1);
 
+            Datos.listaEstudiantes.add(e1);
+
             modeloTabla.addRow(new Object[]{
                 e1.getCarnet(),
                 e1.getNombre(),
@@ -185,6 +187,10 @@ public class FormEstudiante extends JFrame implements ActionListener {
                 e1.setApellidos(txtApellidos.getText());
                 e1.setCorreo(txtCorreo.getText());
 
+                if (filaSeleccionada < Datos.listaEstudiantes.size()) {
+                    Datos.listaEstudiantes.set(filaSeleccionada, e1);
+                }
+
                 modeloTabla.setValueAt(e1.getCarnet(), filaSeleccionada, 0);
                 modeloTabla.setValueAt(e1.getNombre(), filaSeleccionada, 1);
                 modeloTabla.setValueAt(e1.getApellidos(), filaSeleccionada, 2);
@@ -199,6 +205,11 @@ public class FormEstudiante extends JFrame implements ActionListener {
             if (filaSeleccionada >= 0) {
 
                 listaEstudiantes.remove(filaSeleccionada);
+
+                if (filaSeleccionada < Datos.listaEstudiantes.size()) {
+                    Datos.listaEstudiantes.remove(filaSeleccionada);
+                }
+
                 modeloTabla.removeRow(filaSeleccionada);
 
                 JOptionPane.showMessageDialog(null, "Eliminado");

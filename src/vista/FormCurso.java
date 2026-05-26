@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import modelo.Cursos;
+import modelo.Datos;
 import vista.FrmPrincipal;
 
 public class FormCurso extends JFrame implements ActionListener {
@@ -185,6 +186,8 @@ public class FormCurso extends JFrame implements ActionListener {
             );
 
             listaCursos.add(c);
+
+            Datos.listaCursos.add(c);
 
             modeloTabla.addRow(new Object[]{
                 c.getCodigo(),

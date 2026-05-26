@@ -1,6 +1,7 @@
 package vista;
 
 import modelo.Cursos;
+import modelo.Datos;
 import modelo.Estudiante;
 import modelo.Inscripcion;
 
@@ -14,9 +15,6 @@ import java.util.ArrayList;
 public class FrmInscripcion extends JFrame {
 
 	private JPanel panel;
-
-	private ArrayList<Inscripcion> listaInscripciones =
-			new ArrayList<>();
 
 	public FrmInscripcion() {
 
@@ -40,7 +38,6 @@ public class FrmInscripcion extends JFrame {
 		JLabel titulo = new JLabel("INSCRIPCIONES");
 		titulo.setBounds(280, 25, 300, 40);
 		titulo.setFont(new Font("Arial", Font.BOLD, 28));
-		titulo.setForeground(Color.BLACK);
 		panel.add(titulo);
 
 		// CARNET
@@ -49,10 +46,15 @@ public class FrmInscripcion extends JFrame {
 		lblCarnet.setFont(new Font("Arial", Font.BOLD, 16));
 		panel.add(lblCarnet);
 
-		JTextField txtCarnet = new JTextField();
-		txtCarnet.setBounds(160, 90, 170, 30);
-		txtCarnet.setFont(new Font("Arial", Font.PLAIN, 15));
-		panel.add(txtCarnet);
+		JComboBox<String> cbCarnet = new JComboBox<>();
+		cbCarnet.setBounds(160, 90, 170, 30);
+		cbCarnet.addItem("Seleccione");
+
+		for (Estudiante estudiante : Datos.listaEstudiantes) {
+			cbCarnet.addItem(estudiante.getCarnet());
+		}
+
+		panel.add(cbCarnet);
 
 		// ESTUDIANTE
 		JLabel lblEstudiante = new JLabel("Estudiante:");
@@ -63,8 +65,10 @@ public class FrmInscripcion extends JFrame {
 		JTextField txtEstudiante = new JTextField();
 		txtEstudiante.setBounds(470, 90, 220, 30);
 		txtEstudiante.setFont(new Font("Arial", Font.PLAIN, 15));
+		txtEstudiante.setEditable(false);
 		panel.add(txtEstudiante);
 
+		// CURSO / CARRERA
 		JLabel lblCarrera = new JLabel("Carrera:");
 		lblCarrera.setBounds(60, 140, 100, 30);
 		lblCarrera.setFont(new Font("Arial", Font.BOLD, 16));
@@ -93,7 +97,6 @@ public class FrmInscripcion extends JFrame {
 
 		JScrollPane scroll = new JScrollPane(tabla);
 		scroll.setBounds(60, 210, 650, 180);
-
 		panel.add(scroll);
 
 		JButton btnInscribir = new JButton("INSCRIBIR");
@@ -108,58 +111,70 @@ public class FrmInscripcion extends JFrame {
 		btnRegresar.setBounds(480, 415, 70, 30);
 		panel.add(btnRegresar);
 
-		btnInscribir.addActionListener(e -> {
+		// AL SELECCIONAR CARNET, MOSTRAR NOMBRE
+		cbCarnet.addActionListener(e -> {
 
-			String carnet = txtCarnet.getText();
-			String nombre = txtEstudiante.getText();
+			int indice = cbCarnet.getSelectedIndex();
 
-			String carrera =
-					cbCarrera.getSelectedItem().toString();
+			if (indice > 0) {
 
-			if (carnet.isEmpty() || nombre.isEmpty()) {
+				Estudiante estudiante =
+						Datos.listaEstudiantes.get(indice - 1);
 
-				JOptionPane.showMessageDialog(null,
-						"Complete todos los campos");
+				txtEstudiante.setText(estudiante.getNombre() + " " + estudiante.getApellidos());
 
 			} else {
 
-				Estudiante estudiante = new Estudiante(
-						carnet,
-						nombre,
-						"",
-						""
-				);
+				txtEstudiante.setText("");
+			}
+		});
 
-				Cursos curso = new Cursos(
-						"C001",
-						carrera,
-						5,
-						30
-				);
+		btnInscribir.addActionListener(e -> {
 
-				Inscripcion inscripcion =
-						new Inscripcion(estudiante, curso);
-
-				listaInscripciones.add(inscripcion);
-
-				modelo.addRow(new Object[]{
-						estudiante.getCarnet(),
-						estudiante.getNombre(),
-						curso.getNombre()
-				});
+			if (cbCarnet.getSelectedIndex() == 0) {
 
 				JOptionPane.showMessageDialog(null,
-						"Inscripción realizada");
+						"Seleccione un carnet");
 
-				txtCarnet.setText("");
-				txtEstudiante.setText("");
-				cbCarrera.setSelectedIndex(0);
+				return;
 			}
+
+			String carnet = cbCarnet.getSelectedItem().toString();
+			String nombre = txtEstudiante.getText();
+			String carrera = cbCarrera.getSelectedItem().toString();
+
+			Estudiante estudiante =
+					Datos.listaEstudiantes.get(cbCarnet.getSelectedIndex() - 1);
+
+			Cursos curso = new Cursos(
+					"C001",
+					carrera,
+					5,
+					30
+			);
+
+			Inscripcion inscripcion =
+					new Inscripcion(estudiante, curso);
+
+			Datos.listaInscripciones.add(inscripcion);
+
+			modelo.addRow(new Object[]{
+					carnet,
+					nombre,
+					carrera
+			});
+
+			JOptionPane.showMessageDialog(null,
+					"Inscripción realizada");
+
+			cbCarnet.setSelectedIndex(0);
+			txtEstudiante.setText("");
+			cbCarrera.setSelectedIndex(0);
 		});
 
 		btnLimpiar.addActionListener(e -> {
 
-			txtCarnet.setText("");
+			cbCarnet.setSelectedIndex(0);
 			txtEstudiante.setText("");
 			cbCarrera.setSelectedIndex(0);
 
