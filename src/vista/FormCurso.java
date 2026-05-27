@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,13 +24,14 @@ public class FormCurso extends JFrame implements ActionListener {
 
     JLabel lblCodigo;
     JLabel lblNombre;
-    JLabel lblCreditos;
+    JLabel lblCarrera;
     JLabel lblCupo;
 
     JTextField txtCodigo;
     JTextField txtNombre;
-    JTextField txtCreditos;
     JTextField txtCupo;
+
+    JComboBox<String> cbCarrera;
 
     JButton btnGuardar;
     JButton btnLimpiar;
@@ -63,9 +65,10 @@ public class FormCurso extends JFrame implements ActionListener {
         lblNombre.setBounds(50, 120, 160, 30);
         add(lblNombre);
 
-        lblCreditos = new JLabel("Créditos:");
-        lblCreditos.setBounds(50, 170, 100, 30);
-        add(lblCreditos);
+        // CAMBIO DE CREDITOS A CARRERA
+        lblCarrera = new JLabel("Carrera:");
+        lblCarrera.setBounds(50, 170, 100, 30);
+        add(lblCarrera);
 
         lblCupo = new JLabel("Cupo:");
         lblCupo.setBounds(50, 220, 100, 30);
@@ -79,9 +82,19 @@ public class FormCurso extends JFrame implements ActionListener {
         txtNombre.setBounds(180, 120, 200, 30);
         add(txtNombre);
 
-        txtCreditos = new JTextField();
-        txtCreditos.setBounds(180, 170, 200, 30);
-        add(txtCreditos);
+        // COMBOBOX DE CARRERAS
+        cbCarrera = new JComboBox<>();
+        cbCarrera.setBounds(180, 170, 200, 30);
+
+        cbCarrera.addItem("Seleccione");
+
+        cbCarrera.addItem("Ingeniería en Sistemas");
+        cbCarrera.addItem("Derecho");
+        cbCarrera.addItem("Administración");
+        cbCarrera.addItem("Medicina");
+        cbCarrera.addItem("Arquitectura");
+
+        add(cbCarrera);
 
         txtCupo = new JTextField();
         txtCupo.setBounds(180, 220, 200, 30);
@@ -111,7 +124,7 @@ public class FormCurso extends JFrame implements ActionListener {
 
         modeloTabla.addColumn("Código del curso");
         modeloTabla.addColumn("Nombre del curso");
-        modeloTabla.addColumn("Créditos");
+        modeloTabla.addColumn("Carrera");
         modeloTabla.addColumn("Cupo");
 
         tablaCursos = new JTable(modeloTabla);
@@ -147,7 +160,7 @@ public class FormCurso extends JFrame implements ActionListener {
                                 filaSeleccionada,
                                 1).toString());
 
-                txtCreditos.setText(
+                cbCarrera.setSelectedItem(
                         modeloTabla.getValueAt(
                                 filaSeleccionada,
                                 2).toString());
@@ -183,13 +196,13 @@ public class FormCurso extends JFrame implements ActionListener {
 
             String codigo = txtCodigo.getText();
             String nombreCurso = txtNombre.getText();
-            String creditos = txtCreditos.getText();
+            String carrera = cbCarrera.getSelectedItem().toString();
             String cupo = txtCupo.getText();
 
             if (codigo.isEmpty()
                     || nombreCurso.isEmpty()
-                    || creditos.isEmpty()
-                    || cupo.isEmpty()) {
+                    || cupo.isEmpty()
+                    || cbCarrera.getSelectedIndex() == 0) {
 
                 JOptionPane.showMessageDialog(
                         null,
@@ -233,7 +246,7 @@ public class FormCurso extends JFrame implements ActionListener {
             Cursos c = new Cursos(
                     codigo,
                     nombreCurso,
-                    Integer.parseInt(creditos),
+                    cbCarrera.getSelectedIndex(),
                     Integer.parseInt(cupo)
             );
 
@@ -244,7 +257,7 @@ public class FormCurso extends JFrame implements ActionListener {
             modeloTabla.addRow(new Object[]{
                 c.getCodigo(),
                 c.getNombre(),
-                c.getCreditos(),
+                carrera,
                 c.getCupo()
             });
 
@@ -268,8 +281,7 @@ public class FormCurso extends JFrame implements ActionListener {
                 c.setNombre(txtNombre.getText());
 
                 c.setCreditos(
-                        Integer.parseInt(
-                                txtCreditos.getText()));
+                        cbCarrera.getSelectedIndex());
 
                 c.setCupo(
                         Integer.parseInt(
@@ -286,7 +298,7 @@ public class FormCurso extends JFrame implements ActionListener {
                         1);
 
                 modeloTabla.setValueAt(
-                        c.getCreditos(),
+                        cbCarrera.getSelectedItem().toString(),
                         filaSeleccionada,
                         2);
 
@@ -332,8 +344,9 @@ public class FormCurso extends JFrame implements ActionListener {
 
         txtCodigo.setText("");
         txtNombre.setText("");
-        txtCreditos.setText("");
         txtCupo.setText("");
+
+        cbCarrera.setSelectedIndex(0);
 
         filaSeleccionada = -1;
     }

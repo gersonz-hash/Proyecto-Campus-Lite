@@ -3,6 +3,7 @@ package main;
 import Persistencia.PersistenciaCursos;
 import Persistencia.PersistenciaEstudiantes;
 import Persistencia.PersistenciaInscripciones;
+import Persistencia.PersistenciaEvaluaciones;
 
 import vista.FrmPrincipal;
 
@@ -18,6 +19,9 @@ public class Main {
 
         // CARGAR INSCRIPCIONES
         PersistenciaInscripciones.cargarInscripciones();
+
+        // CARGAR EVALUACIONES
+        PersistenciaEvaluaciones.cargarEvaluaciones();
 
         // ABRIR SISTEMA
         FrmPrincipal frm = new FrmPrincipal();
