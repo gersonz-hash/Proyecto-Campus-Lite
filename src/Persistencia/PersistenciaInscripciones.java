@@ -17,7 +17,6 @@ public class PersistenciaInscripciones {
     private static final String ARCHIVO =
             "inscripciones.csv";
 
-    // GUARDAR
     public static void guardarInscripciones() {
 
         try {
@@ -32,7 +31,7 @@ public class PersistenciaInscripciones {
                 bw.write(
                         i.getEstudiante().getCarnet()
                                 + ","
-                                + i.getCurso().getCodigo()
+                                + i.getCurso().getNombre()
                 );
 
                 bw.newLine();
@@ -49,7 +48,6 @@ public class PersistenciaInscripciones {
         }
     }
 
-    // CARGAR
     public static void cargarInscripciones() {
 
         try {
@@ -73,12 +71,10 @@ public class PersistenciaInscripciones {
                 if (datos.length == 2) {
 
                     String carnet = datos[0];
-                    String codigoCurso = datos[1];
+                    String carrera = datos[1];
 
                     Estudiante estudiante = null;
-                    Cursos curso = null;
 
-                    // BUSCAR ESTUDIANTE
                     for (Estudiante e :
                             Datos.listaEstudiantes) {
 
@@ -90,28 +86,22 @@ public class PersistenciaInscripciones {
                         }
                     }
 
-                    // BUSCAR CURSO
-                    for (Cursos c :
-                            Datos.listaCursos) {
+                    if (estudiante != null) {
 
-                        if (c.getCodigo()
-                                .equals(codigoCurso)) {
+                        Cursos curso =
+                                new Cursos(
+                                        carrera,
+                                        carrera,
+                                        0,
+                                        1000);
 
-                            curso = c;
-                            break;
-                        }
-                    }
-
-                    // CREAR INSCRIPCION
-                    if (estudiante != null
-                            && curso != null) {
-
-                        Inscripcion i =
+                        Inscripcion inscripcion =
                                 new Inscripcion(
                                         estudiante,
                                         curso);
 
-                        Datos.listaInscripciones.add(i);
+                        Datos.listaInscripciones.add(
+                                inscripcion);
                     }
                 }
             }

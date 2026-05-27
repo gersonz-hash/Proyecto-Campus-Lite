@@ -1,6 +1,7 @@
 package vista;
 
 import Persistencia.PersistenciaInscripciones;
+
 import modelo.Cursos;
 import modelo.Datos;
 import modelo.Estudiante;
@@ -40,7 +41,6 @@ public class FrmInscripcion extends JFrame {
         titulo.setFont(new Font("Arial", Font.BOLD, 28));
         panel.add(titulo);
 
-        // CARNET
         JLabel lblCarnet = new JLabel("Carnet:");
         lblCarnet.setBounds(60, 90, 100, 30);
         lblCarnet.setFont(new Font("Arial", Font.BOLD, 16));
@@ -48,18 +48,14 @@ public class FrmInscripcion extends JFrame {
 
         JComboBox<String> cbCarnet = new JComboBox<>();
         cbCarnet.setBounds(160, 90, 170, 30);
-
         cbCarnet.addItem("Seleccione");
 
         for (Estudiante estudiante : Datos.listaEstudiantes) {
-
-            cbCarnet.addItem(
-                    estudiante.getCarnet());
+            cbCarnet.addItem(estudiante.getCarnet());
         }
 
         panel.add(cbCarnet);
 
-        // ESTUDIANTE
         JLabel lblEstudiante = new JLabel("Estudiante:");
         lblEstudiante.setBounds(360, 90, 120, 30);
         lblEstudiante.setFont(new Font("Arial", Font.BOLD, 16));
@@ -71,8 +67,7 @@ public class FrmInscripcion extends JFrame {
         txtEstudiante.setEditable(false);
         panel.add(txtEstudiante);
 
-        // CURSOS REALES
-        JLabel lblCurso = new JLabel("Curso:");
+        JLabel lblCurso = new JLabel("Carrera:");
         lblCurso.setBounds(60, 140, 100, 30);
         lblCurso.setFont(new Font("Arial", Font.BOLD, 16));
         panel.add(lblCurso);
@@ -82,21 +77,18 @@ public class FrmInscripcion extends JFrame {
         cbCurso.setFont(new Font("Arial", Font.PLAIN, 15));
 
         cbCurso.addItem("Seleccione");
-
-        for (Cursos curso : Datos.listaCursos) {
-
-            cbCurso.addItem(
-                    curso.getCodigo()
-                            + " - "
-                            + curso.getNombre());
-        }
+        cbCurso.addItem("Ingeniería en Sistemas");
+        cbCurso.addItem("Derecho");
+        cbCurso.addItem("Administración");
+        cbCurso.addItem("Medicina");
+        cbCurso.addItem("Arquitectura");
 
         panel.add(cbCurso);
 
         String[] columnas = {
                 "Carnet",
                 "Estudiante",
-                "Curso"
+                "Carrera"
         };
 
         DefaultTableModel modelo =
@@ -108,7 +100,6 @@ public class FrmInscripcion extends JFrame {
         scroll.setBounds(60, 210, 650, 180);
         panel.add(scroll);
 
-        // CARGAR INSCRIPCIONES EXISTENTES
         for (Inscripcion i : Datos.listaInscripciones) {
 
             modelo.addRow(new Object[]{
@@ -121,18 +112,21 @@ public class FrmInscripcion extends JFrame {
         }
 
         JButton btnInscribir = new JButton("INSCRIBIR");
-        btnInscribir.setBounds(200, 415, 120, 30);
+        btnInscribir.setBounds(130, 415, 120, 30);
         panel.add(btnInscribir);
 
         JButton btnLimpiar = new JButton("LIMPIAR");
-        btnLimpiar.setBounds(340, 415, 120, 30);
+        btnLimpiar.setBounds(270, 415, 120, 30);
         panel.add(btnLimpiar);
 
+        JButton btnEliminar = new JButton("ELIMINAR");
+        btnEliminar.setBounds(410, 415, 120, 30);
+        panel.add(btnEliminar);
+
         JButton btnRegresar = new JButton("↩");
-        btnRegresar.setBounds(480, 415, 70, 30);
+        btnRegresar.setBounds(550, 415, 70, 30);
         panel.add(btnRegresar);
 
-        // MOSTRAR NOMBRE
         cbCarnet.addActionListener(e -> {
 
             int indice = cbCarnet.getSelectedIndex();
@@ -153,7 +147,6 @@ public class FrmInscripcion extends JFrame {
             }
         });
 
-        // INSCRIBIR
         btnInscribir.addActionListener(e -> {
 
             if (cbCarnet.getSelectedIndex() == 0) {
@@ -169,7 +162,7 @@ public class FrmInscripcion extends JFrame {
 
                 JOptionPane.showMessageDialog(
                         null,
-                        "Seleccione un curso");
+                        "Seleccione una carrera");
 
                 return;
             }
@@ -178,11 +171,16 @@ public class FrmInscripcion extends JFrame {
                     Datos.listaEstudiantes.get(
                             cbCarnet.getSelectedIndex() - 1);
 
-            Cursos curso =
-                    Datos.listaCursos.get(
-                            cbCurso.getSelectedIndex() - 1);
+            String carrera =
+                    cbCurso.getSelectedItem().toString();
 
-            // VALIDAR DUPLICADO
+            Cursos curso =
+                    new Cursos(
+                            carrera,
+                            carrera,
+                            0,
+                            1000);
+
             for (Inscripcion i : Datos.listaInscripciones) {
 
                 if (i.getEstudiante()
@@ -192,8 +190,8 @@ public class FrmInscripcion extends JFrame {
                         &&
 
                         i.getCurso()
-                                .getCodigo()
-                                .equals(curso.getCodigo())) {
+                                .getNombre()
+                                .equals(carrera)) {
 
                     JOptionPane.showMessageDialog(
                             null,
@@ -203,33 +201,11 @@ public class FrmInscripcion extends JFrame {
                 }
             }
 
-            // VALIDAR CUPO
-            int contador = 0;
-
-            for (Inscripcion i : Datos.listaInscripciones) {
-
-                if (i.getCurso()
-                        .getCodigo()
-                        .equals(curso.getCodigo())) {
-
-                    contador++;
-                }
-            }
-
-            if (contador >= curso.getCupo()) {
-
-                JOptionPane.showMessageDialog(
-                        null,
-                        "No hay cupo disponible");
-
-                return;
-            }
-
-            // CREAR INSCRIPCION
             Inscripcion inscripcion =
                     new Inscripcion(estudiante, curso);
 
             Datos.listaInscripciones.add(inscripcion);
+
             PersistenciaInscripciones.guardarInscripciones();
 
             modelo.addRow(new Object[]{
@@ -237,7 +213,7 @@ public class FrmInscripcion extends JFrame {
                     estudiante.getNombre()
                             + " "
                             + estudiante.getApellidos(),
-                    curso.getNombre()
+                    carrera
             });
 
             JOptionPane.showMessageDialog(
@@ -246,20 +222,40 @@ public class FrmInscripcion extends JFrame {
 
             cbCarnet.setSelectedIndex(0);
             cbCurso.setSelectedIndex(0);
-
             txtEstudiante.setText("");
         });
 
-        // LIMPIAR
         btnLimpiar.addActionListener(e -> {
 
             cbCarnet.setSelectedIndex(0);
             cbCurso.setSelectedIndex(0);
-
             txtEstudiante.setText("");
         });
 
-        // REGRESAR
+        btnEliminar.addActionListener(e -> {
+
+            int fila = tabla.getSelectedRow();
+
+            if (fila < 0) {
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Seleccione una inscripción");
+
+                return;
+            }
+
+            Datos.listaInscripciones.remove(fila);
+
+            PersistenciaInscripciones.guardarInscripciones();
+
+            modelo.removeRow(fila);
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Inscripción eliminada");
+        });
+
         btnRegresar.addActionListener(e -> {
 
             dispose();
