@@ -1,8 +1,9 @@
 package vista;
 
+import Persistencia.PersistenciaCursos;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,7 +16,6 @@ import javax.swing.table.DefaultTableModel;
 
 import modelo.Cursos;
 import modelo.Datos;
-import vista.FrmPrincipal;
 
 public class FormCurso extends JFrame implements ActionListener {
 
@@ -42,9 +42,6 @@ public class FormCurso extends JFrame implements ActionListener {
     JScrollPane scroll;
 
     int filaSeleccionada = -1;
-
-    //LISTA USANDO MODELO
-    ArrayList<Cursos> listaCursos = new ArrayList<>();
 
     public FormCurso() {
 
@@ -123,16 +120,42 @@ public class FormCurso extends JFrame implements ActionListener {
         scroll.setBounds(20, 410, 500, 120);
         add(scroll);
 
+        // CARGAR DATOS EN TABLA
+        for (Cursos c : Datos.listaCursos) {
+
+            modeloTabla.addRow(new Object[]{
+                c.getCodigo(),
+                c.getNombre(),
+                c.getCreditos(),
+                c.getCupo()
+            });
+        }
+
         tablaCursos.getSelectionModel().addListSelectionListener(e -> {
 
             filaSeleccionada = tablaCursos.getSelectedRow();
 
             if (filaSeleccionada >= 0) {
 
-                txtCodigo.setText(modeloTabla.getValueAt(filaSeleccionada, 0).toString());
-                txtNombre.setText(modeloTabla.getValueAt(filaSeleccionada, 1).toString());
-                txtCreditos.setText(modeloTabla.getValueAt(filaSeleccionada, 2).toString());
-                txtCupo.setText(modeloTabla.getValueAt(filaSeleccionada, 3).toString());
+                txtCodigo.setText(
+                        modeloTabla.getValueAt(
+                                filaSeleccionada,
+                                0).toString());
+
+                txtNombre.setText(
+                        modeloTabla.getValueAt(
+                                filaSeleccionada,
+                                1).toString());
+
+                txtCreditos.setText(
+                        modeloTabla.getValueAt(
+                                filaSeleccionada,
+                                2).toString());
+
+                txtCupo.setText(
+                        modeloTabla.getValueAt(
+                                filaSeleccionada,
+                                3).toString());
             }
         });
 
@@ -149,11 +172,13 @@ public class FormCurso extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btnMenu) {
+
             this.dispose();
+
             new FrmPrincipal();
         }
 
-        //GUARDAR CON MODELO
+        // GUARDAR
         if (e.getSource() == btnGuardar) {
 
             String codigo = txtCodigo.getText();
@@ -161,21 +186,48 @@ public class FormCurso extends JFrame implements ActionListener {
             String creditos = txtCreditos.getText();
             String cupo = txtCupo.getText();
 
-            if (codigo.isEmpty() || nombreCurso.isEmpty()
-                    || creditos.isEmpty() || cupo.isEmpty()) {
+            if (codigo.isEmpty()
+                    || nombreCurso.isEmpty()
+                    || creditos.isEmpty()
+                    || cupo.isEmpty()) {
 
-                JOptionPane.showMessageDialog(null, "No deje campos vacíos");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "No deje campos vacíos");
+
                 return;
             }
 
             if (!codigo.matches("[a-zA-Z0-9-]+")) {
-                JOptionPane.showMessageDialog(null, "Código inválido");
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Código inválido");
+
                 return;
             }
 
-            if (!nombreCurso.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-                JOptionPane.showMessageDialog(null, "Nombre inválido");
+            if (!nombreCurso.matches(
+                    "[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Nombre inválido");
+
                 return;
+            }
+
+            // VALIDAR DUPLICADO
+            for (Cursos cu : Datos.listaCursos) {
+
+                if (cu.getCodigo().equals(codigo)) {
+
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "El código ya existe");
+
+                    return;
+                }
             }
 
             Cursos c = new Cursos(
@@ -185,9 +237,9 @@ public class FormCurso extends JFrame implements ActionListener {
                     Integer.parseInt(cupo)
             );
 
-            listaCursos.add(c);
-
             Datos.listaCursos.add(c);
+
+            PersistenciaCursos.guardarCursos();
 
             modeloTabla.addRow(new Object[]{
                 c.getCodigo(),
@@ -196,55 +248,93 @@ public class FormCurso extends JFrame implements ActionListener {
                 c.getCupo()
             });
 
-            JOptionPane.showMessageDialog(null, "Curso guardado correctamente");
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Curso guardado correctamente");
+
             limpiar();
         }
 
-        //EDITAR
+        // EDITAR
         if (e.getSource() == btnEditar) {
 
             if (filaSeleccionada >= 0) {
 
-                Cursos c = listaCursos.get(filaSeleccionada);
+                Cursos c =
+                        Datos.listaCursos.get(filaSeleccionada);
 
                 c.setCodigo(txtCodigo.getText());
+
                 c.setNombre(txtNombre.getText());
-                c.setCreditos(Integer.parseInt(txtCreditos.getText()));
-                c.setCupo(Integer.parseInt(txtCupo.getText()));
 
-                modeloTabla.setValueAt(c.getCodigo(), filaSeleccionada, 0);
-                modeloTabla.setValueAt(c.getNombre(), filaSeleccionada, 1);
-                modeloTabla.setValueAt(c.getCreditos(), filaSeleccionada, 2);
-                modeloTabla.setValueAt(c.getCupo(), filaSeleccionada, 3);
+                c.setCreditos(
+                        Integer.parseInt(
+                                txtCreditos.getText()));
 
-                JOptionPane.showMessageDialog(null, "Curso actualizado");
+                c.setCupo(
+                        Integer.parseInt(
+                                txtCupo.getText()));
+
+                modeloTabla.setValueAt(
+                        c.getCodigo(),
+                        filaSeleccionada,
+                        0);
+
+                modeloTabla.setValueAt(
+                        c.getNombre(),
+                        filaSeleccionada,
+                        1);
+
+                modeloTabla.setValueAt(
+                        c.getCreditos(),
+                        filaSeleccionada,
+                        2);
+
+                modeloTabla.setValueAt(
+                        c.getCupo(),
+                        filaSeleccionada,
+                        3);
+
+                PersistenciaCursos.guardarCursos();
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Curso actualizado");
             }
         }
 
-        //ELIMINAR
+        // ELIMINAR
         if (e.getSource() == btnEliminar) {
 
             if (filaSeleccionada >= 0) {
 
-                listaCursos.remove(filaSeleccionada);
+                Datos.listaCursos.remove(filaSeleccionada);
+
+                PersistenciaCursos.guardarCursos();
+
                 modeloTabla.removeRow(filaSeleccionada);
 
-                JOptionPane.showMessageDialog(null, "Curso eliminado");
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Curso eliminado");
+
                 limpiar();
             }
         }
 
-        //LIMPIAR
+        // LIMPIAR
         if (e.getSource() == btnLimpiar) {
             limpiar();
         }
     }
 
     void limpiar() {
+
         txtCodigo.setText("");
         txtNombre.setText("");
         txtCreditos.setText("");
         txtCupo.setText("");
+
         filaSeleccionada = -1;
     }
 }

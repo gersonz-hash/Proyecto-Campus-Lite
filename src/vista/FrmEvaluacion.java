@@ -1,5 +1,8 @@
 package vista;
 
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -41,10 +44,12 @@ public class FrmEvaluacion extends JFrame {
 
 		JComboBox<String> cbTipo = new JComboBox<>();
 		cbTipo.setBounds(190, 70, 160, 30);
+
 		cbTipo.addItem("Tipo de Evaluación");
 		cbTipo.addItem("Examen");
 		cbTipo.addItem("Laboratorio");
 		cbTipo.addItem("Proyecto");
+
 		getContentPane().add(cbTipo);
 
 		JTextField txtNombre = new JTextField();
@@ -82,6 +87,7 @@ public class FrmEvaluacion extends JFrame {
 
 		JScrollPane scroll = new JScrollPane(tabla);
 		scroll.setBounds(40, 160, 690, 220);
+
 		getContentPane().add(scroll);
 
 		JButton btnAgregar = new JButton("Agregar");
@@ -110,48 +116,134 @@ public class FrmEvaluacion extends JFrame {
 
 				filaSeleccionada = tabla.getSelectedRow();
 
-				if (filaSeleccionada >= 0 && filaSeleccionada < modelo.getRowCount()) {
+				if (filaSeleccionada >= 0
+						&& filaSeleccionada < modelo.getRowCount()) {
 
-					cbCurso.setSelectedItem(modelo.getValueAt(filaSeleccionada, 0).toString());
-					cbTipo.setSelectedItem(modelo.getValueAt(filaSeleccionada, 1).toString());
-					txtNombre.setText(modelo.getValueAt(filaSeleccionada, 2).toString());
-					txtNota.setText(modelo.getValueAt(filaSeleccionada, 3).toString());
-					txtPonderacion.setText(modelo.getValueAt(filaSeleccionada, 4).toString());
+					cbCurso.setSelectedItem(
+							modelo.getValueAt(
+									filaSeleccionada,
+									0).toString());
+
+					cbTipo.setSelectedItem(
+							modelo.getValueAt(
+									filaSeleccionada,
+									1).toString());
+
+					txtNombre.setText(
+							modelo.getValueAt(
+									filaSeleccionada,
+									2).toString());
+
+					txtNota.setText(
+							modelo.getValueAt(
+									filaSeleccionada,
+									3).toString());
+
+					txtPonderacion.setText(
+							modelo.getValueAt(
+									filaSeleccionada,
+									4).toString());
 				}
 			}
 		});
 
 		btnAgregar.addActionListener(e -> {
 
-			if (!validarCampos(cbCurso, cbTipo, txtNombre, txtNota, txtPonderacion)) {
+			if (!validarCampos(
+					cbCurso,
+					cbTipo,
+					txtNombre,
+					txtNota,
+					txtPonderacion)) {
+
 				return;
 			}
 
-			String curso = cbCurso.getSelectedItem().toString();
-			String tipo = cbTipo.getSelectedItem().toString();
-			String nombre = txtNombre.getText();
-			double nota = Double.parseDouble(txtNota.getText());
-			double ponderacion = Double.parseDouble(txtPonderacion.getText());
+			String curso =
+					cbCurso.getSelectedItem().toString();
 
-			Evaluacion evaluacion = crearEvaluacion(tipo, nombre, nota, ponderacion);
+			String tipo =
+					cbTipo.getSelectedItem().toString();
+
+			String nombre =
+					txtNombre.getText();
+
+			double nota =
+					Double.parseDouble(
+							txtNota.getText());
+
+			double ponderacion =
+					Double.parseDouble(
+							txtPonderacion.getText());
+
+			// VALIDAR PONDERACIONES
+			double suma = 0;
+
+			for (Evaluacion ev :
+					Datos.listaEvaluaciones) {
+
+				suma += ev.getPorcentaje();
+			}
+
+			if ((suma + ponderacion) > 100) {
+
+				JOptionPane.showMessageDialog(
+						null,
+						"La suma de ponderaciones supera 100%");
+
+				return;
+			}
+
+			Evaluacion evaluacion =
+					crearEvaluacion(
+							tipo,
+							nombre,
+							nota,
+							ponderacion);
 
 			if (filaSeleccionada >= 0) {
 
-				modelo.setValueAt(curso, filaSeleccionada, 0);
-				modelo.setValueAt(tipo, filaSeleccionada, 1);
-				modelo.setValueAt(nombre, filaSeleccionada, 2);
-				modelo.setValueAt(nota, filaSeleccionada, 3);
-				modelo.setValueAt(ponderacion, filaSeleccionada, 4);
+				modelo.setValueAt(
+						curso,
+						filaSeleccionada,
+						0);
 
-				if (filaSeleccionada < Datos.listaEvaluaciones.size()) {
-					Datos.listaEvaluaciones.set(filaSeleccionada, evaluacion);
+				modelo.setValueAt(
+						tipo,
+						filaSeleccionada,
+						1);
+
+				modelo.setValueAt(
+						nombre,
+						filaSeleccionada,
+						2);
+
+				modelo.setValueAt(
+						nota,
+						filaSeleccionada,
+						3);
+
+				modelo.setValueAt(
+						ponderacion,
+						filaSeleccionada,
+						4);
+
+				if (filaSeleccionada
+						< Datos.listaEvaluaciones.size()) {
+
+					Datos.listaEvaluaciones.set(
+							filaSeleccionada,
+							evaluacion);
 				}
 
-				JOptionPane.showMessageDialog(null, "Evaluación actualizada correctamente");
+				JOptionPane.showMessageDialog(
+						null,
+						"Evaluación actualizada correctamente");
 
 			} else {
 
-				Datos.listaEvaluaciones.add(evaluacion);
+				Datos.listaEvaluaciones.add(
+						evaluacion);
 
 				modelo.addRow(new Object[]{
 						curso,
@@ -161,20 +253,33 @@ public class FrmEvaluacion extends JFrame {
 						ponderacion
 				});
 
-				JOptionPane.showMessageDialog(null, "Evaluación agregada correctamente");
+				JOptionPane.showMessageDialog(
+						null,
+						"Evaluación agregada correctamente");
 			}
 
-			limpiar(cbCurso, cbTipo, txtNombre, txtNota, txtPonderacion, tabla);
+			limpiar(
+					cbCurso,
+					cbTipo,
+					txtNombre,
+					txtNota,
+					txtPonderacion,
+					tabla);
 		});
 
 		btnEditar.addActionListener(e -> {
 
 			if (filaSeleccionada < 0) {
-				JOptionPane.showMessageDialog(null, "Seleccione una fila para editar");
+
+				JOptionPane.showMessageDialog(
+						null,
+						"Seleccione una fila para editar");
+
 				return;
 			}
 
-			JOptionPane.showMessageDialog(null,
+			JOptionPane.showMessageDialog(
+					null,
 					"Modifique los datos arriba y presione Agregar para actualizar");
 		});
 
@@ -183,127 +288,226 @@ public class FrmEvaluacion extends JFrame {
 			int fila = tabla.getSelectedRow();
 
 			if (fila < 0) {
-				JOptionPane.showMessageDialog(null, "Seleccione una fila para eliminar");
+
+				JOptionPane.showMessageDialog(
+						null,
+						"Seleccione una fila para eliminar");
+
 				return;
 			}
 
 			if (fila < Datos.listaEvaluaciones.size()) {
+
 				Datos.listaEvaluaciones.remove(fila);
 			}
 
 			modelo.removeRow(fila);
 
 			filaSeleccionada = -1;
+
 			tabla.clearSelection();
 
-			JOptionPane.showMessageDialog(null, "Evaluación eliminada correctamente");
+			JOptionPane.showMessageDialog(
+					null,
+					"Evaluación eliminada correctamente");
 
-			limpiar(cbCurso, cbTipo, txtNombre, txtNota, txtPonderacion, tabla);
+			limpiar(
+					cbCurso,
+					cbTipo,
+					txtNombre,
+					txtNota,
+					txtPonderacion,
+					tabla);
 		});
 
 		btnLimpiar.addActionListener(e -> {
-			limpiar(cbCurso, cbTipo, txtNombre, txtNota, txtPonderacion, tabla);
+
+			limpiar(
+					cbCurso,
+					cbTipo,
+					txtNombre,
+					txtNota,
+					txtPonderacion,
+					tabla);
 		});
 
 		btnRegresar.addActionListener(e -> {
+
 			dispose();
 		});
 
 		setVisible(true);
 	}
 
-	private Evaluacion crearEvaluacion(String tipo, String nombre, double nota, double ponderacion) {
+	private Evaluacion crearEvaluacion(
+			String tipo,
+			String nombre,
+			double nota,
+			double ponderacion) {
 
 		if (tipo.equals("Examen")) {
-			return new ExamenEscrito(nombre, nota, ponderacion);
+
+			return new ExamenEscrito(
+					nombre,
+					nota,
+					ponderacion);
+
 		} else if (tipo.equals("Laboratorio")) {
-			return new Laboratorio(nombre, nota, ponderacion);
+
+			return new Laboratorio(
+					nombre,
+					nota,
+					ponderacion);
+
 		} else {
-			return new Proyecto(nombre, nota, ponderacion);
+
+			return new Proyecto(
+					nombre,
+					nota,
+					ponderacion);
 		}
 	}
 
-	private boolean validarCampos(JComboBox<String> cbCurso, JComboBox<String> cbTipo,
-			JTextField txtNombre, JTextField txtNota, JTextField txtPonderacion) {
+	private boolean validarCampos(
+			JComboBox<String> cbCurso,
+			JComboBox<String> cbTipo,
+			JTextField txtNombre,
+			JTextField txtNota,
+			JTextField txtPonderacion) {
 
 		String nombre = txtNombre.getText();
 		String nota = txtNota.getText();
 		String ponderacion = txtPonderacion.getText();
 
 		if (cbCurso.getSelectedIndex() == 0) {
-			JOptionPane.showMessageDialog(null, "Seleccione un curso");
+
+			JOptionPane.showMessageDialog(
+					null,
+					"Seleccione un curso");
+
 			return false;
 		}
 
 		if (cbTipo.getSelectedIndex() == 0) {
-			JOptionPane.showMessageDialog(null, "Seleccione un tipo de evaluación");
+
+			JOptionPane.showMessageDialog(
+					null,
+					"Seleccione un tipo de evaluación");
+
 			return false;
 		}
 
-		if (nombre.isEmpty() || nombre.equals("Nombre")
-				|| nota.isEmpty() || nota.equals("Nota")
-				|| ponderacion.isEmpty() || ponderacion.equals("Ponderación")) {
+		if (nombre.isEmpty()
+				|| nombre.equals("Nombre")
+				|| nota.isEmpty()
+				|| nota.equals("Nota")
+				|| ponderacion.isEmpty()
+				|| ponderacion.equals("Ponderación")) {
 
-			JOptionPane.showMessageDialog(null, "No deje campos vacíos");
+			JOptionPane.showMessageDialog(
+					null,
+					"No deje campos vacíos");
+
 			return false;
 		}
 
-		if (!nombre.matches("[A-Za-zÁÉÍÓÚáéíóúÑñ]+(\\s[A-Za-zÁÉÍÓÚáéíóúÑñ]+)+")) {
-			JOptionPane.showMessageDialog(null, "Ingrese un nombre válido");
+		if (!nombre.matches(
+				"[A-Za-zÁÉÍÓÚáéíóúÑñ]+(\\s[A-Za-zÁÉÍÓÚáéíóúÑñ]+)+")) {
+
+			JOptionPane.showMessageDialog(
+					null,
+					"Ingrese un nombre válido");
+
 			return false;
 		}
 
 		try {
-			double notaNumero = Double.parseDouble(nota);
-			double ponderacionNumero = Double.parseDouble(ponderacion);
 
-			if (notaNumero < 0 || notaNumero > 100) {
-				JOptionPane.showMessageDialog(null, "La nota debe estar entre 0 y 100");
+			double notaNumero =
+					Double.parseDouble(nota);
+
+			double ponderacionNumero =
+					Double.parseDouble(ponderacion);
+
+			if (notaNumero < 0
+					|| notaNumero > 100) {
+
+				JOptionPane.showMessageDialog(
+						null,
+						"La nota debe estar entre 0 y 100");
+
 				return false;
 			}
 
-			if (ponderacionNumero <= 0 || ponderacionNumero > 100) {
-				JOptionPane.showMessageDialog(null, "La ponderación debe estar entre 1 y 100");
+			if (ponderacionNumero <= 0
+					|| ponderacionNumero > 100) {
+
+				JOptionPane.showMessageDialog(
+						null,
+						"La ponderación debe estar entre 1 y 100");
+
 				return false;
 			}
 
 		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(null, "Nota y ponderación deben ser números");
+
+			JOptionPane.showMessageDialog(
+					null,
+					"Nota y ponderación deben ser números");
+
 			return false;
 		}
 
 		return true;
 	}
 
-	private void limpiar(JComboBox<String> cbCurso, JComboBox<String> cbTipo,
-			JTextField txtNombre, JTextField txtNota, JTextField txtPonderacion, JTable tabla) {
+	private void limpiar(
+			JComboBox<String> cbCurso,
+			JComboBox<String> cbTipo,
+			JTextField txtNombre,
+			JTextField txtNota,
+			JTextField txtPonderacion,
+			JTable tabla) {
 
 		tabla.clearSelection();
+
 		cbCurso.setSelectedIndex(0);
+
 		cbTipo.setSelectedIndex(0);
+
 		txtNombre.setText("Nombre");
+
 		txtNota.setText("Nota");
+
 		txtPonderacion.setText("Ponderación");
+
 		filaSeleccionada = -1;
 	}
 
-	private void limpiarTextoAlDarClick(JTextField campo, String textoInicial) {
+	private void limpiarTextoAlDarClick(
+			JTextField campo,
+			String textoInicial) {
 
-		campo.addFocusListener(new FocusAdapter() {
+		campo.addFocusListener(
+				new FocusAdapter() {
 
-			public void focusGained(FocusEvent e) {
+					public void focusGained(
+							FocusEvent e) {
 
-				if (campo.getText().equals(textoInicial)) {
-					campo.setText("");
-				}
-			}
+						if (campo.getText().equals(textoInicial)) {
 
-			public void focusLost(FocusEvent e) {
+							campo.setText("");
+						}
+					}
 
-				if (campo.getText().isEmpty()) {
-					campo.setText(textoInicial);
-				}
-			}
-		});
+					public void focusLost(
+							FocusEvent e) {
+
+						if (campo.getText().isEmpty()) {
+
+							campo.setText(textoInicial);
+						}
+					}
+				});
 	}
 }

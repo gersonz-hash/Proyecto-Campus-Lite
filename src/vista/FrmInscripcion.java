@@ -1,5 +1,6 @@
 package vista;
 
+import Persistencia.PersistenciaInscripciones;
 import modelo.Cursos;
 import modelo.Datos;
 import modelo.Estudiante;
@@ -10,180 +11,258 @@ import javax.swing.table.DefaultTableModel;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.ArrayList;
 
 public class FrmInscripcion extends JFrame {
 
-	private JPanel panel;
+    private JPanel panel;
 
-	public FrmInscripcion() {
+    public FrmInscripcion() {
 
-		setTitle("Inscripciones");
-		setSize(780, 500);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setResizable(false);
+        setTitle("Inscripciones");
+        setSize(780, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
-		panel = new JPanel();
-		panel.setLayout(null);
-		panel.setBackground(new Color(230, 230, 230));
+        panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBackground(new Color(230, 230, 230));
 
-		agregarComponentes();
+        agregarComponentes();
 
-		add(panel);
-	}
+        add(panel);
+    }
 
-	private void agregarComponentes() {
+    private void agregarComponentes() {
 
-		JLabel titulo = new JLabel("INSCRIPCIONES");
-		titulo.setBounds(280, 25, 300, 40);
-		titulo.setFont(new Font("Arial", Font.BOLD, 28));
-		panel.add(titulo);
+        JLabel titulo = new JLabel("INSCRIPCIONES");
+        titulo.setBounds(280, 25, 300, 40);
+        titulo.setFont(new Font("Arial", Font.BOLD, 28));
+        panel.add(titulo);
 
-		// CARNET
-		JLabel lblCarnet = new JLabel("Carnet:");
-		lblCarnet.setBounds(60, 90, 100, 30);
-		lblCarnet.setFont(new Font("Arial", Font.BOLD, 16));
-		panel.add(lblCarnet);
+        // CARNET
+        JLabel lblCarnet = new JLabel("Carnet:");
+        lblCarnet.setBounds(60, 90, 100, 30);
+        lblCarnet.setFont(new Font("Arial", Font.BOLD, 16));
+        panel.add(lblCarnet);
 
-		JComboBox<String> cbCarnet = new JComboBox<>();
-		cbCarnet.setBounds(160, 90, 170, 30);
-		cbCarnet.addItem("Seleccione");
+        JComboBox<String> cbCarnet = new JComboBox<>();
+        cbCarnet.setBounds(160, 90, 170, 30);
 
-		for (Estudiante estudiante : Datos.listaEstudiantes) {
-			cbCarnet.addItem(estudiante.getCarnet());
-		}
+        cbCarnet.addItem("Seleccione");
 
-		panel.add(cbCarnet);
+        for (Estudiante estudiante : Datos.listaEstudiantes) {
 
-		// ESTUDIANTE
-		JLabel lblEstudiante = new JLabel("Estudiante:");
-		lblEstudiante.setBounds(360, 90, 120, 30);
-		lblEstudiante.setFont(new Font("Arial", Font.BOLD, 16));
-		panel.add(lblEstudiante);
+            cbCarnet.addItem(
+                    estudiante.getCarnet());
+        }
 
-		JTextField txtEstudiante = new JTextField();
-		txtEstudiante.setBounds(470, 90, 220, 30);
-		txtEstudiante.setFont(new Font("Arial", Font.PLAIN, 15));
-		txtEstudiante.setEditable(false);
-		panel.add(txtEstudiante);
+        panel.add(cbCarnet);
 
-		// CURSO / CARRERA
-		JLabel lblCarrera = new JLabel("Carrera:");
-		lblCarrera.setBounds(60, 140, 100, 30);
-		lblCarrera.setFont(new Font("Arial", Font.BOLD, 16));
-		panel.add(lblCarrera);
+        // ESTUDIANTE
+        JLabel lblEstudiante = new JLabel("Estudiante:");
+        lblEstudiante.setBounds(360, 90, 120, 30);
+        lblEstudiante.setFont(new Font("Arial", Font.BOLD, 16));
+        panel.add(lblEstudiante);
 
-		JComboBox<String> cbCarrera = new JComboBox<>();
-		cbCarrera.setBounds(160, 140, 250, 30);
-		cbCarrera.setFont(new Font("Arial", Font.PLAIN, 15));
+        JTextField txtEstudiante = new JTextField();
+        txtEstudiante.setBounds(470, 90, 220, 30);
+        txtEstudiante.setFont(new Font("Arial", Font.PLAIN, 15));
+        txtEstudiante.setEditable(false);
+        panel.add(txtEstudiante);
 
-		cbCarrera.addItem("Ingenieria en Sistemas");
-		cbCarrera.addItem("Administracion de Empresas");
-		cbCarrera.addItem("Contaduria Publica");
-		cbCarrera.addItem("Derecho");
-		cbCarrera.addItem("Arquitectura");
-		cbCarrera.addItem("Medicina");
-		cbCarrera.addItem("Psicologia");
+        // CURSOS REALES
+        JLabel lblCurso = new JLabel("Curso:");
+        lblCurso.setBounds(60, 140, 100, 30);
+        lblCurso.setFont(new Font("Arial", Font.BOLD, 16));
+        panel.add(lblCurso);
 
-		panel.add(cbCarrera);
+        JComboBox<String> cbCurso = new JComboBox<>();
+        cbCurso.setBounds(160, 140, 250, 30);
+        cbCurso.setFont(new Font("Arial", Font.PLAIN, 15));
 
-		String[] columnas = {"Carnet", "Estudiante", "Carrera"};
+        cbCurso.addItem("Seleccione");
 
-		DefaultTableModel modelo =
-				new DefaultTableModel(null, columnas);
+        for (Cursos curso : Datos.listaCursos) {
 
-		JTable tabla = new JTable(modelo);
+            cbCurso.addItem(
+                    curso.getCodigo()
+                            + " - "
+                            + curso.getNombre());
+        }
 
-		JScrollPane scroll = new JScrollPane(tabla);
-		scroll.setBounds(60, 210, 650, 180);
-		panel.add(scroll);
+        panel.add(cbCurso);
 
-		JButton btnInscribir = new JButton("INSCRIBIR");
-		btnInscribir.setBounds(200, 415, 120, 30);
-		panel.add(btnInscribir);
+        String[] columnas = {
+                "Carnet",
+                "Estudiante",
+                "Curso"
+        };
 
-		JButton btnLimpiar = new JButton("LIMPIAR");
-		btnLimpiar.setBounds(340, 415, 120, 30);
-		panel.add(btnLimpiar);
+        DefaultTableModel modelo =
+                new DefaultTableModel(null, columnas);
 
-		JButton btnRegresar = new JButton("↩");
-		btnRegresar.setBounds(480, 415, 70, 30);
-		panel.add(btnRegresar);
+        JTable tabla = new JTable(modelo);
 
-		// AL SELECCIONAR CARNET, MOSTRAR NOMBRE
-		cbCarnet.addActionListener(e -> {
+        JScrollPane scroll = new JScrollPane(tabla);
+        scroll.setBounds(60, 210, 650, 180);
+        panel.add(scroll);
 
-			int indice = cbCarnet.getSelectedIndex();
+        // CARGAR INSCRIPCIONES EXISTENTES
+        for (Inscripcion i : Datos.listaInscripciones) {
 
-			if (indice > 0) {
+            modelo.addRow(new Object[]{
+                    i.getEstudiante().getCarnet(),
+                    i.getEstudiante().getNombre()
+                            + " "
+                            + i.getEstudiante().getApellidos(),
+                    i.getCurso().getNombre()
+            });
+        }
 
-				Estudiante estudiante =
-						Datos.listaEstudiantes.get(indice - 1);
+        JButton btnInscribir = new JButton("INSCRIBIR");
+        btnInscribir.setBounds(200, 415, 120, 30);
+        panel.add(btnInscribir);
 
-				txtEstudiante.setText(estudiante.getNombre() + " " + estudiante.getApellidos());
+        JButton btnLimpiar = new JButton("LIMPIAR");
+        btnLimpiar.setBounds(340, 415, 120, 30);
+        panel.add(btnLimpiar);
 
-			} else {
+        JButton btnRegresar = new JButton("↩");
+        btnRegresar.setBounds(480, 415, 70, 30);
+        panel.add(btnRegresar);
 
-				txtEstudiante.setText("");
-			}
-		});
+        // MOSTRAR NOMBRE
+        cbCarnet.addActionListener(e -> {
 
-		btnInscribir.addActionListener(e -> {
+            int indice = cbCarnet.getSelectedIndex();
 
-			if (cbCarnet.getSelectedIndex() == 0) {
+            if (indice > 0) {
 
-				JOptionPane.showMessageDialog(null,
-						"Seleccione un carnet");
+                Estudiante estudiante =
+                        Datos.listaEstudiantes.get(indice - 1);
 
-				return;
-			}
+                txtEstudiante.setText(
+                        estudiante.getNombre()
+                                + " "
+                                + estudiante.getApellidos());
 
-			String carnet = cbCarnet.getSelectedItem().toString();
-			String nombre = txtEstudiante.getText();
-			String carrera = cbCarrera.getSelectedItem().toString();
+            } else {
 
-			Estudiante estudiante =
-					Datos.listaEstudiantes.get(cbCarnet.getSelectedIndex() - 1);
+                txtEstudiante.setText("");
+            }
+        });
 
-			Cursos curso = new Cursos(
-					"C001",
-					carrera,
-					5,
-					30
-			);
+        // INSCRIBIR
+        btnInscribir.addActionListener(e -> {
 
-			Inscripcion inscripcion =
-					new Inscripcion(estudiante, curso);
+            if (cbCarnet.getSelectedIndex() == 0) {
 
-			Datos.listaInscripciones.add(inscripcion);
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Seleccione un carnet");
 
-			modelo.addRow(new Object[]{
-					carnet,
-					nombre,
-					carrera
-			});
+                return;
+            }
 
-			JOptionPane.showMessageDialog(null,
-					"Inscripción realizada");
+            if (cbCurso.getSelectedIndex() == 0) {
 
-			cbCarnet.setSelectedIndex(0);
-			txtEstudiante.setText("");
-			cbCarrera.setSelectedIndex(0);
-		});
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Seleccione un curso");
 
-		btnLimpiar.addActionListener(e -> {
+                return;
+            }
 
-			cbCarnet.setSelectedIndex(0);
-			txtEstudiante.setText("");
-			cbCarrera.setSelectedIndex(0);
+            Estudiante estudiante =
+                    Datos.listaEstudiantes.get(
+                            cbCarnet.getSelectedIndex() - 1);
 
-		});
+            Cursos curso =
+                    Datos.listaCursos.get(
+                            cbCurso.getSelectedIndex() - 1);
 
-		btnRegresar.addActionListener(e -> {
+            // VALIDAR DUPLICADO
+            for (Inscripcion i : Datos.listaInscripciones) {
 
-			dispose();
+                if (i.getEstudiante()
+                        .getCarnet()
+                        .equals(estudiante.getCarnet())
 
-		});
-	}
+                        &&
+
+                        i.getCurso()
+                                .getCodigo()
+                                .equals(curso.getCodigo())) {
+
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "El estudiante ya está inscrito");
+
+                    return;
+                }
+            }
+
+            // VALIDAR CUPO
+            int contador = 0;
+
+            for (Inscripcion i : Datos.listaInscripciones) {
+
+                if (i.getCurso()
+                        .getCodigo()
+                        .equals(curso.getCodigo())) {
+
+                    contador++;
+                }
+            }
+
+            if (contador >= curso.getCupo()) {
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "No hay cupo disponible");
+
+                return;
+            }
+
+            // CREAR INSCRIPCION
+            Inscripcion inscripcion =
+                    new Inscripcion(estudiante, curso);
+
+            Datos.listaInscripciones.add(inscripcion);
+            PersistenciaInscripciones.guardarInscripciones();
+
+            modelo.addRow(new Object[]{
+                    estudiante.getCarnet(),
+                    estudiante.getNombre()
+                            + " "
+                            + estudiante.getApellidos(),
+                    curso.getNombre()
+            });
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Inscripción realizada");
+
+            cbCarnet.setSelectedIndex(0);
+            cbCurso.setSelectedIndex(0);
+
+            txtEstudiante.setText("");
+        });
+
+        // LIMPIAR
+        btnLimpiar.addActionListener(e -> {
+
+            cbCarnet.setSelectedIndex(0);
+            cbCurso.setSelectedIndex(0);
+
+            txtEstudiante.setText("");
+        });
+
+        // REGRESAR
+        btnRegresar.addActionListener(e -> {
+
+            dispose();
+        });
+    }
 }
