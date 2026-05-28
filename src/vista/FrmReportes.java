@@ -18,6 +18,8 @@ public class FrmReportes extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
+        getContentPane().setBackground(
+                new java.awt.Color(240, 248, 255));
 
         JLabel lblTitulo =
                 new JLabel("REPORTE DE EVALUACIONES");

@@ -27,7 +27,7 @@ public class FrmInscripcion extends JFrame {
 
         panel = new JPanel();
         panel.setLayout(null);
-        panel.setBackground(new Color(230, 230, 230));
+        panel.setBackground(new Color(240, 248, 255));
 
         agregarComponentes();
 
@@ -53,138 +53,92 @@ public class FrmInscripcion extends JFrame {
         cbCarnet.addItem("Seleccione");
 
         for (Estudiante estudiante : Datos.listaEstudiantes) {
-
-            cbCarnet.addItem(
-                    estudiante.getCarnet());
+            cbCarnet.addItem(estudiante.getCarnet());
         }
 
         panel.add(cbCarnet);
 
-        JLabel lblEstudiante =
-                new JLabel("Estudiante:");
-
+        JLabel lblEstudiante = new JLabel("Estudiante:");
         lblEstudiante.setBounds(360, 90, 120, 30);
-        lblEstudiante.setFont(
-                new Font("Arial", Font.BOLD, 16));
-
+        lblEstudiante.setFont(new Font("Arial", Font.BOLD, 16));
         panel.add(lblEstudiante);
 
-        JTextField txtEstudiante =
-                new JTextField();
-
+        JTextField txtEstudiante = new JTextField();
         txtEstudiante.setBounds(470, 90, 220, 30);
-        txtEstudiante.setFont(
-                new Font("Arial", Font.PLAIN, 15));
-
+        txtEstudiante.setFont(new Font("Arial", Font.PLAIN, 15));
         txtEstudiante.setEditable(false);
-
         panel.add(txtEstudiante);
 
-        JLabel lblCurso =
-                new JLabel("Curso:");
-
+        JLabel lblCurso = new JLabel("Carrera:");
         lblCurso.setBounds(60, 140, 100, 30);
-        lblCurso.setFont(
-                new Font("Arial", Font.BOLD, 16));
-
+        lblCurso.setFont(new Font("Arial", Font.BOLD, 16));
         panel.add(lblCurso);
 
-        JComboBox<String> cbCurso =
-                new JComboBox<>();
-
+        JComboBox<String> cbCurso = new JComboBox<>();
         cbCurso.setBounds(160, 140, 250, 30);
-
-        cbCurso.setFont(
-                new Font("Arial", Font.PLAIN, 15));
+        cbCurso.setFont(new Font("Arial", Font.PLAIN, 15));
 
         cbCurso.addItem("Seleccione");
-
-        // CARGAR CURSOS REALES
-        for (Cursos c : Datos.listaCursos) {
-
-            cbCurso.addItem(c.getNombre());
-        }
+        cbCurso.addItem("Ingeniería en Sistemas");
+        cbCurso.addItem("Derecho");
+        cbCurso.addItem("Administración");
+        cbCurso.addItem("Medicina");
+        cbCurso.addItem("Arquitectura");
 
         panel.add(cbCurso);
 
         String[] columnas = {
                 "Carnet",
                 "Estudiante",
-                "Curso"
+                "Carrera"
         };
 
         DefaultTableModel modelo =
-                new DefaultTableModel(
-                        null,
-                        columnas);
+                new DefaultTableModel(null, columnas);
 
         JTable tabla = new JTable(modelo);
 
-        JScrollPane scroll =
-                new JScrollPane(tabla);
-
+        JScrollPane scroll = new JScrollPane(tabla);
         scroll.setBounds(60, 210, 650, 180);
-
         panel.add(scroll);
 
-        // CARGAR INSCRIPCIONES
-        for (Inscripcion i :
-                Datos.listaInscripciones) {
+        for (Inscripcion i : Datos.listaInscripciones) {
 
             modelo.addRow(new Object[]{
-
                     i.getEstudiante().getCarnet(),
-
                     i.getEstudiante().getNombre()
                             + " "
                             + i.getEstudiante().getApellidos(),
-
                     i.getCurso().getNombre()
             });
         }
 
-        JButton btnInscribir =
-                new JButton("INSCRIBIR");
-
+        JButton btnInscribir = new JButton("INSCRIBIR");
         btnInscribir.setBounds(130, 415, 120, 30);
-
         panel.add(btnInscribir);
 
-        JButton btnLimpiar =
-                new JButton("LIMPIAR");
-
+        JButton btnLimpiar = new JButton("LIMPIAR");
         btnLimpiar.setBounds(270, 415, 120, 30);
-
         panel.add(btnLimpiar);
 
-        JButton btnEliminar =
-                new JButton("ELIMINAR");
-
+        JButton btnEliminar = new JButton("ELIMINAR");
         btnEliminar.setBounds(410, 415, 120, 30);
-
         panel.add(btnEliminar);
 
-        JButton btnRegresar =
-                new JButton("↩");
-
+        JButton btnRegresar = new JButton("↩");
         btnRegresar.setBounds(550, 415, 70, 30);
-
         panel.add(btnRegresar);
 
-        // MOSTRAR ESTUDIANTE
         cbCarnet.addActionListener(e -> {
 
-            int indice =
-                    cbCarnet.getSelectedIndex();
+            int indice = cbCarnet.getSelectedIndex();
 
             if (indice > 0) {
 
                 Estudiante estudiante =
-                        Datos.listaEstudiantes.get(
-                                indice - 1);
+                        Datos.listaEstudiantes.get(indice - 1);
 
                 txtEstudiante.setText(
-
                         estudiante.getNombre()
                                 + " "
                                 + estudiante.getApellidos());
@@ -195,7 +149,6 @@ public class FrmInscripcion extends JFrame {
             }
         });
 
-        // INSCRIBIR
         btnInscribir.addActionListener(e -> {
 
             if (cbCarnet.getSelectedIndex() == 0) {
@@ -211,7 +164,7 @@ public class FrmInscripcion extends JFrame {
 
                 JOptionPane.showMessageDialog(
                         null,
-                        "Seleccione un curso");
+                        "Seleccione una carrera");
 
                 return;
             }
@@ -223,32 +176,14 @@ public class FrmInscripcion extends JFrame {
             String nombreCurso =
                     cbCurso.getSelectedItem().toString();
 
-            Cursos cursoSeleccionado = null;
+            Cursos cursoSeleccionado =
+                    new Cursos(
+                            nombreCurso,
+                            nombreCurso,
+                            nombreCurso,
+                            1000);
 
-            // BUSCAR CURSO REAL
-            for (Cursos c :
-                    Datos.listaCursos) {
-
-                if (c.getNombre()
-                        .equals(nombreCurso)) {
-
-                    cursoSeleccionado = c;
-                    break;
-                }
-            }
-
-            if (cursoSeleccionado == null) {
-
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Curso no encontrado");
-
-                return;
-            }
-
-            // VALIDAR DUPLICADO
-            for (Inscripcion i :
-                    Datos.listaInscripciones) {
+            for (Inscripcion i : Datos.listaInscripciones) {
 
                 if (i.getEstudiante()
                         .getCarnet()
@@ -273,19 +208,15 @@ public class FrmInscripcion extends JFrame {
                             estudiante,
                             cursoSeleccionado);
 
-            Datos.listaInscripciones.add(
-                    inscripcion);
+            Datos.listaInscripciones.add(inscripcion);
 
             PersistenciaInscripciones.guardarInscripciones();
 
             modelo.addRow(new Object[]{
-
                     estudiante.getCarnet(),
-
                     estudiante.getNombre()
                             + " "
                             + estudiante.getApellidos(),
-
                     nombreCurso
             });
 
@@ -294,27 +225,20 @@ public class FrmInscripcion extends JFrame {
                     "Inscripción realizada");
 
             cbCarnet.setSelectedIndex(0);
-
             cbCurso.setSelectedIndex(0);
-
             txtEstudiante.setText("");
         });
 
-        // LIMPIAR
         btnLimpiar.addActionListener(e -> {
 
             cbCarnet.setSelectedIndex(0);
-
             cbCurso.setSelectedIndex(0);
-
             txtEstudiante.setText("");
         });
 
-        // ELIMINAR
         btnEliminar.addActionListener(e -> {
 
-            int fila =
-                    tabla.getSelectedRow();
+            int fila = tabla.getSelectedRow();
 
             if (fila < 0) {
 
@@ -336,9 +260,7 @@ public class FrmInscripcion extends JFrame {
                     "Inscripción eliminada");
         });
 
-        // REGRESAR
         btnRegresar.addActionListener(e -> {
-
             dispose();
         });
     }

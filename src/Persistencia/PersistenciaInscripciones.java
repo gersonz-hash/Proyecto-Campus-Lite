@@ -15,7 +15,7 @@ public class PersistenciaInscripciones {
 
                 bw.write(
                         i.getEstudiante().getCarnet() + "," +
-                        i.getCurso().getCodigo()
+                        i.getCurso().getNombre()
                 );
 
                 bw.newLine();
@@ -28,7 +28,7 @@ public class PersistenciaInscripciones {
 
     public static void cargarInscripciones() {
 
-        Datos.listaInscripciones.clear(); // 🔥 IMPORTANTE
+        Datos.listaInscripciones.clear();
 
         File archivo = new File(ARCHIVO);
         if (!archivo.exists()) return;
@@ -44,10 +44,9 @@ public class PersistenciaInscripciones {
                 if (d.length == 2) {
 
                     String carnet = d[0];
-                    String codigoCurso = d[1];
+                    String carrera = d[1];
 
                     Estudiante est = null;
-                    Cursos cur = null;
 
                     for (Estudiante e : Datos.listaEstudiantes) {
                         if (e.getCarnet().equals(carnet)) {
@@ -56,15 +55,19 @@ public class PersistenciaInscripciones {
                         }
                     }
 
-                    for (Cursos c : Datos.listaCursos) {
-                        if (c.getCodigo().equals(codigoCurso)) {
-                            cur = c;
-                            break;
-                        }
-                    }
+                    if (est != null) {
 
-                    if (est != null && cur != null) {
-                        Datos.listaInscripciones.add(new Inscripcion(est, cur));
+                        Cursos carreraSeleccionada =
+                                new Cursos(
+                                        carrera,
+                                        carrera,
+                                        carrera,
+                                        1000);
+
+                        Datos.listaInscripciones.add(
+                                new Inscripcion(
+                                        est,
+                                        carreraSeleccionada));
                     }
                 }
             }
