@@ -1,91 +1,63 @@
 package Persistencia;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import modelo.Cursos;
-import modelo.Datos;
+import java.io.*;
+import modelo.*;
 
 public class PersistenciaCursos {
 
     private static final String ARCHIVO = "cursos.csv";
 
-    // GUARDAR
     public static void guardarCursos() {
 
-        try {
-
-            BufferedWriter bw = new BufferedWriter(
-                    new FileWriter(ARCHIVO));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ARCHIVO))) {
 
             for (Cursos c : Datos.listaCursos) {
 
                 bw.write(
                         c.getCodigo() + "," +
                         c.getNombre() + "," +
-                        c.getCreditos() + "," +
+                        c.getCarrera() + "," +
                         c.getCupo()
                 );
 
                 bw.newLine();
             }
 
-            bw.close();
-
         } catch (IOException e) {
-
-            System.out.println(
-                    "Error al guardar cursos");
-
-            e.printStackTrace();
+            System.out.println("Error al guardar cursos");
         }
     }
 
-    // CARGAR
     public static void cargarCursos() {
 
-        try {
+        Datos.listaCursos.clear(); // 🔥 IMPORTANTE
 
-            File archivo = new File(ARCHIVO);
+        File archivo = new File(ARCHIVO);
+        if (!archivo.exists()) return;
 
-            if (!archivo.exists()) {
-                return;
-            }
-
-            BufferedReader br = new BufferedReader(
-                    new FileReader(archivo));
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
 
             String linea;
 
             while ((linea = br.readLine()) != null) {
 
-                String[] datos = linea.split(",");
+                String[] d = linea.split(",");
 
-                if (datos.length == 4) {
+                if (d.length == 4) {
 
                     Cursos c = new Cursos(
-                            datos[0],
-                            datos[1],
-                            Integer.parseInt(datos[2]),
-                            Integer.parseInt(datos[3])
+                            d[0],
+                            d[1],
+                            d[2],
+                            Integer.parseInt(d[3])
                     );
 
                     Datos.listaCursos.add(c);
                 }
             }
 
-            br.close();
-
         } catch (IOException e) {
-
-            System.out.println(
-                    "Error al cargar cursos");
-
-            e.printStackTrace();
+            System.out.println("Error al cargar cursos");
         }
     }
 }
