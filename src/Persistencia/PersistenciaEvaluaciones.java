@@ -30,6 +30,10 @@ public class PersistenciaEvaluaciones {
                 bw.write(
                         e.getClass().getSimpleName()
                                 + ","
+                                + e.getCarrera()
+                                + ","
+                                + e.getCurso()
+                                + ","
                                 + e.getNombre()
                                 + ","
                                 + e.getNota()
@@ -69,16 +73,18 @@ public class PersistenciaEvaluaciones {
 
                 String[] datos = linea.split(",");
 
-                if (datos.length == 4) {
+                if (datos.length == 6) {
 
                     String tipo = datos[0];
-                    String estudiante = datos[1];
+                    String carrera = datos[1];
+                    String curso = datos[2];
+                    String estudiante = datos[3];
 
                     double nota =
-                            Double.parseDouble(datos[2]);
+                            Double.parseDouble(datos[4]);
 
                     double ponderacion =
-                            Double.parseDouble(datos[3]);
+                            Double.parseDouble(datos[5]);
 
                     Evaluacion evaluacion = null;
 
@@ -86,6 +92,8 @@ public class PersistenciaEvaluaciones {
 
                         evaluacion =
                                 new ExamenEscrito(
+                                        carrera,
+                                        curso,
                                         estudiante,
                                         nota,
                                         ponderacion);
@@ -94,6 +102,8 @@ public class PersistenciaEvaluaciones {
 
                         evaluacion =
                                 new Laboratorio(
+                                        carrera,
+                                        curso,
                                         estudiante,
                                         nota,
                                         ponderacion);
@@ -102,6 +112,8 @@ public class PersistenciaEvaluaciones {
 
                         evaluacion =
                                 new Proyecto(
+                                        carrera,
+                                        curso,
                                         estudiante,
                                         nota,
                                         ponderacion);

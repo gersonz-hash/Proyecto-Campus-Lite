@@ -1,47 +1,26 @@
 package modelo;
 
 public class Cursos {
-	private String codigo, nombreCarrera;
-	private int creditos, cupo;
-	
-	public Cursos(String codigo, String nombre, int creditos, int cupo) {
-		this.codigo = codigo;
-		this.nombreCarrera = nombre;
-		this.creditos = creditos;
-		this.cupo = cupo;
-	}
-	//Getters and Setters
 
-	public String getCodigo() {
-		return codigo;
-	}
+    private String codigo;
+    private String nombre;
+    private String carrera;
+    private int cupo;
 
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
+    public Cursos(String codigo, String nombre, String carrera, int cupo) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.carrera = carrera;
+        this.cupo = cupo;
+    }
 
-	public String getNombre() {
-		return nombreCarrera;
-	}
+    public String getCodigo() { return codigo; }
+    public String getNombre() { return nombre; }
+    public String getCarrera() { return carrera; }
+    public int getCupo() { return cupo; }
 
-	public void setNombre(String nombre) {
-		this.nombreCarrera = nombre;
-	}
-
-	public int getCreditos() {
-		return creditos;
-	}
-
-	public void setCreditos(int creditos) {
-		this.creditos = creditos;
-	}
-
-	public int getCupo() {
-		return cupo;
-	}
-
-	public void setCupo(int cupo) {
-		this.cupo = cupo;
-	}
-
+    public void setCodigo(String codigo) { this.codigo = codigo; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setCarrera(String carrera) { this.carrera = carrera; }
+    public void setCupo(int cupo) { this.cupo = cupo; }
 }

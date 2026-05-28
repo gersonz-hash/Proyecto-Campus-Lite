@@ -5,13 +5,16 @@ import javax.swing.table.DefaultTableModel;
 
 import modelo.Datos;
 import modelo.Evaluacion;
+import modelo.ExamenEscrito;
+import modelo.Laboratorio;
+import modelo.Proyecto;
 
 public class FrmReportes extends JFrame {
 
     public FrmReportes() {
 
         setTitle("Reportes");
-        setSize(700, 500);
+        setSize(1000, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
@@ -19,17 +22,18 @@ public class FrmReportes extends JFrame {
         JLabel lblTitulo =
                 new JLabel("REPORTE DE EVALUACIONES");
 
-        lblTitulo.setBounds(200, 20, 300, 30);
+        lblTitulo.setBounds(350, 20, 300, 30);
 
         add(lblTitulo);
 
-        // TABLA
         String[] columnas = {
-                "Tipo",
-                "Nombre",
-                "Nota",
-                "Porcentaje",
-                "Nota Final"
+                "Carrera",
+                "Curso",
+                "Estudiante",
+                "Examen",
+                "Laboratorio",
+                "Proyecto",
+                "Total"
         };
 
         DefaultTableModel modelo =
@@ -40,52 +44,133 @@ public class FrmReportes extends JFrame {
         JScrollPane scroll =
                 new JScrollPane(tabla);
 
-        scroll.setBounds(40, 80, 600, 250);
+        scroll.setBounds(30, 80, 920, 280);
 
         add(scroll);
 
-        // TOTAL
-        JLabel lblPromedio =
-                new JLabel("Promedio Final: 0");
+        for (Evaluacion e : Datos.listaEvaluaciones) {
 
-        lblPromedio.setBounds(40, 360, 300, 30);
+            String carrera =
+                    e.getCarrera();
 
-        add(lblPromedio);
+            String curso =
+                    e.getCurso();
 
-        double total = 0;
+            String estudiante =
+                    e.getNombre();
 
-        // CARGAR DATOS
-        for (Evaluacion e :
-                Datos.listaEvaluaciones) {
+            boolean existe = false;
 
-            double notaFinal =
-                    e.calcularNotaFinal();
+            for (int i = 0;
+                 i < modelo.getRowCount();
+                 i++) {
 
-            total += notaFinal;
+                String estudianteTabla =
+                        modelo.getValueAt(i, 2).toString();
 
-            modelo.addRow(new Object[]{
+                String cursoTabla =
+                        modelo.getValueAt(i, 1).toString();
 
-                    e.getClass().getSimpleName(),
+                if (estudianteTabla.equals(estudiante)
+                        && cursoTabla.equals(curso)) {
 
-                    e.getNombre(),
+                    double examen =
+                            Double.parseDouble(
+                                    modelo.getValueAt(i, 3).toString());
 
-                    e.getNota(),
+                    double laboratorio =
+                            Double.parseDouble(
+                                    modelo.getValueAt(i, 4).toString());
 
-                    e.getPorcentaje(),
+                    double proyecto =
+                            Double.parseDouble(
+                                    modelo.getValueAt(i, 5).toString());
 
-                    notaFinal
-            });
+                    if (e instanceof ExamenEscrito) {
+
+                        examen = e.getNota();
+
+                        modelo.setValueAt(
+                                examen,
+                                i,
+                                3);
+
+                    } else if (e instanceof Laboratorio) {
+
+                        laboratorio = e.getNota();
+
+                        modelo.setValueAt(
+                                laboratorio,
+                                i,
+                                4);
+
+                    } else if (e instanceof Proyecto) {
+
+                        proyecto = e.getNota();
+
+                        modelo.setValueAt(
+                                proyecto,
+                                i,
+                                5);
+                    }
+
+                    double total =
+                            examen
+                                    + laboratorio
+                                    + proyecto;
+
+                    modelo.setValueAt(
+                            total,
+                            i,
+                            6);
+
+                    existe = true;
+
+                    break;
+                }
+            }
+
+            if (!existe) {
+
+                double examen = 0;
+                double laboratorio = 0;
+                double proyecto = 0;
+
+                if (e instanceof ExamenEscrito) {
+
+                    examen = e.getNota();
+
+                } else if (e instanceof Laboratorio) {
+
+                    laboratorio = e.getNota();
+
+                } else if (e instanceof Proyecto) {
+
+                    proyecto = e.getNota();
+                }
+
+                double total =
+                        examen
+                                + laboratorio
+                                + proyecto;
+
+                modelo.addRow(new Object[]{
+
+                        carrera,
+                        curso,
+                        estudiante,
+                        examen,
+                        laboratorio,
+                        proyecto,
+                        total
+                });
+            }
         }
 
-        lblPromedio.setText(
-                "Promedio Final: "
-                        + total);
-
-        // BOTON REGRESAR
         JButton btnCerrar =
                 new JButton("Cerrar");
 
-        btnCerrar.setBounds(260, 400, 120, 35);
+        btnCerrar.setBounds(420, 390, 120, 35);
 
         add(btnCerrar);
 
