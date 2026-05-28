@@ -19,8 +19,9 @@ public class FrmEvaluacion extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(null);
+        getContentPane().setBackground(
+                new java.awt.Color(240, 248, 255));
 
-        // CORRECCIÓN: cargar datos al abrir
         PersistenciaCursos.cargarCursos();
         PersistenciaEstudiantes.cargarEstudiantes();
 
@@ -57,13 +58,39 @@ public class FrmEvaluacion extends JFrame {
         getContentPane().add(cbEstudiante);
 
         JTextField txtNota = new JTextField();
-        txtNota.setBounds(820, 70, 70, 30);
+        txtNota.setBounds(812, 69, 70, 30);
+        txtNota.setText("Nota");
         getContentPane().add(txtNota);
 
         JTextField txtPonderacion = new JTextField();
-        txtPonderacion.setBounds(900, 70, 70, 30);
+        txtPonderacion.setBounds(894, 69, 100, 30);
+        txtPonderacion.setText("Ponderación");
         txtPonderacion.setEditable(false);
         getContentPane().add(txtPonderacion);
+
+        txtNota.addFocusListener(
+                new java.awt.event.FocusAdapter() {
+
+                    public void focusGained(
+                            java.awt.event.FocusEvent evt) {
+
+                        if (txtNota.getText()
+                                .equals("Nota")) {
+
+                            txtNota.setText("");
+                        }
+                    }
+
+                    public void focusLost(
+                            java.awt.event.FocusEvent evt) {
+
+                        if (txtNota.getText()
+                                .isEmpty()) {
+
+                            txtNota.setText("Nota");
+                        }
+                    }
+                });
 
         cbCarrera.addActionListener(e -> {
 
@@ -93,37 +120,42 @@ public class FrmEvaluacion extends JFrame {
                 }
             }
 
-            cargando = false;
-        });
-
-        cbCurso.addActionListener(e -> {
-
-            if (cargando) return;
-
-            cbEstudiante.removeAllItems();
-            cbEstudiante.addItem("Estudiante");
-
-            if (cbCurso.getSelectedIndex() == 0) return;
-
-            String curso = (String) cbCurso.getSelectedItem();
-            if (curso == null) return;
-
             for (Inscripcion i : Datos.listaInscripciones) {
 
                 if (i != null &&
                         i.getCurso() != null &&
                         i.getCurso().getNombre() != null &&
-                        i.getCurso().getNombre().trim().equalsIgnoreCase(curso.trim())) {
+                        i.getCurso().getNombre().trim().equalsIgnoreCase(carrera.trim())) {
 
                     Estudiante est = i.getEstudiante();
 
                     if (est != null) {
-                        cbEstudiante.addItem(
-                                est.getNombre() + " " + est.getApellidos()
-                        );
+
+                        String nombreCompleto =
+                                est.getNombre() + " " + est.getApellidos();
+
+                        boolean existe = false;
+
+                        for (int j = 0;
+                             j < cbEstudiante.getItemCount();
+                             j++) {
+
+                            if (cbEstudiante.getItemAt(j)
+                                    .equals(nombreCompleto)) {
+
+                                existe = true;
+                                break;
+                            }
+                        }
+
+                        if (!existe) {
+                            cbEstudiante.addItem(nombreCompleto);
+                        }
                     }
                 }
             }
+
+            cargando = false;
         });
 
         cbTipo.addActionListener(e -> {
@@ -143,7 +175,8 @@ public class FrmEvaluacion extends JFrame {
                     txtPonderacion.setText("20");
                     break;
                 default:
-                    txtPonderacion.setText("");
+                    txtPonderacion.setText("Ponderación");
+                    txtNota.setText("Nota");
             }
         });
 
@@ -159,6 +192,28 @@ public class FrmEvaluacion extends JFrame {
         JScrollPane scroll = new JScrollPane(tabla);
         scroll.setBounds(40, 160, 930, 220);
         getContentPane().add(scroll);
+
+        for (Evaluacion ev : Datos.listaEvaluaciones) {
+
+            String tipo = "";
+
+            if (ev instanceof ExamenEscrito) {
+                tipo = "Examenes";
+            } else if (ev instanceof Laboratorio) {
+                tipo = "Laboratorio";
+            } else if (ev instanceof Proyecto) {
+                tipo = "Proyecto";
+            }
+
+            modelo.addRow(new Object[]{
+                    ev.getCarrera(),
+                    ev.getCurso(),
+                    tipo,
+                    ev.getNombre(),
+                    ev.getNota(),
+                    ev.getPorcentaje()
+            });
+        }
 
         JButton btnAgregar = new JButton("Agregar");
         btnAgregar.setBounds(260, 400, 100, 30);
@@ -198,6 +253,28 @@ public class FrmEvaluacion extends JFrame {
 
             String tipo = (String) cbTipo.getSelectedItem();
 
+            String estudianteSeleccionado =
+                    cbEstudiante.getSelectedItem().toString();
+
+            for (Evaluacion evaluacionGuardada : Datos.listaEvaluaciones) {
+
+                String tipoGuardado =
+                        evaluacionGuardada.getClass().getSimpleName();
+
+                String tipoSeleccionado =
+                        tipo.equals("Examenes") ? "ExamenEscrito" : tipo;
+
+                if (evaluacionGuardada.getNombre().equals(estudianteSeleccionado)
+                        && tipoGuardado.equals(tipoSeleccionado)) {
+
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Este estudiante ya tiene registrada esta evaluación");
+
+                    return;
+                }
+            }
+
             if (tipo.equals("Examenes") && nota > 65) return;
             if (tipo.equals("Laboratorio") && nota > 15) return;
             if (tipo.equals("Proyecto") && nota > 20) return;
@@ -208,7 +285,7 @@ public class FrmEvaluacion extends JFrame {
                     cbCarrera.getSelectedItem().toString(),
                     cbCurso.getSelectedItem().toString(),
                     tipo,
-                    cbEstudiante.getSelectedItem().toString(),
+                    estudianteSeleccionado,
                     nota,
                     ponderacion
             );
@@ -225,7 +302,8 @@ public class FrmEvaluacion extends JFrame {
                     ev.getPorcentaje()
             });
 
-            txtNota.setText("");
+            txtNota.setText("Nota");
+            txtPonderacion.setText("Ponderación");
         });
 
         btnEliminar.addActionListener(e -> {
@@ -256,8 +334,8 @@ public class FrmEvaluacion extends JFrame {
 
             cbTipo.setSelectedIndex(0);
 
-            txtNota.setText("");
-            txtPonderacion.setText("");
+            txtNota.setText("Nota");
+            txtPonderacion.setText("Ponderación");
 
             cargando = false;
         });
