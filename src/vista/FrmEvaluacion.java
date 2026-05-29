@@ -2,6 +2,7 @@ package vista;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 import Persistencia.PersistenciaCursos;
 import Persistencia.PersistenciaEstudiantes;
@@ -19,52 +20,67 @@ public class FrmEvaluacion extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(null);
-        getContentPane().setBackground(
-                new java.awt.Color(240, 248, 255));
+        getContentPane().setBackground(new Color(240, 248, 255));
 
         PersistenciaCursos.cargarCursos();
         PersistenciaEstudiantes.cargarEstudiantes();
 
-        JLabel lblCampus = new JLabel("Campus Lite");
-        lblCampus.setBounds(40, 20, 150, 30);
+        JLabel lblCampus = new JLabel("CAMPUS LITE - EVALUACIONES");
+        lblCampus.setBounds(330, 20, 400, 30);
+        lblCampus.setFont(new Font("Arial", Font.BOLD, 22));
+        lblCampus.setForeground(new Color(20, 33, 61));
         getContentPane().add(lblCampus);
 
         JComboBox<String> cbCarrera = new JComboBox<>();
-        cbCarrera.setBounds(40, 70, 170, 30);
+        cbCarrera.setBounds(40, 70, 170, 32);
         cbCarrera.addItem("Carrera");
         cbCarrera.addItem("Ingeniería en Sistemas");
         cbCarrera.addItem("Derecho");
         cbCarrera.addItem("Administración");
         cbCarrera.addItem("Medicina");
         cbCarrera.addItem("Arquitectura");
+        cbCarrera.setFont(new Font("Arial", Font.PLAIN, 13));
+        cbCarrera.setBackground(Color.WHITE);
         getContentPane().add(cbCarrera);
 
         JComboBox<String> cbCurso = new JComboBox<>();
-        cbCurso.setBounds(230, 70, 180, 30);
+        cbCurso.setBounds(230, 70, 180, 32);
         cbCurso.addItem("Curso");
+        cbCurso.setFont(new Font("Arial", Font.PLAIN, 13));
+        cbCurso.setBackground(Color.WHITE);
         getContentPane().add(cbCurso);
 
         JComboBox<String> cbTipo = new JComboBox<>();
-        cbTipo.setBounds(430, 70, 170, 30);
+        cbTipo.setBounds(430, 70, 170, 32);
         cbTipo.addItem("Tipo de Evaluación");
         cbTipo.addItem("Examenes");
         cbTipo.addItem("Laboratorio");
         cbTipo.addItem("Proyecto");
+        cbTipo.setFont(new Font("Arial", Font.PLAIN, 13));
+        cbTipo.setBackground(Color.WHITE);
         getContentPane().add(cbTipo);
 
         JComboBox<String> cbEstudiante = new JComboBox<>();
-        cbEstudiante.setBounds(620, 70, 180, 30);
+        cbEstudiante.setBounds(620, 70, 180, 32);
         cbEstudiante.addItem("Estudiante");
+        cbEstudiante.setFont(new Font("Arial", Font.PLAIN, 13));
+        cbEstudiante.setBackground(Color.WHITE);
         getContentPane().add(cbEstudiante);
 
         JTextField txtNota = new JTextField();
-        txtNota.setBounds(812, 69, 70, 30);
+        txtNota.setBounds(812, 69, 70, 32);
         txtNota.setText("Nota");
+        txtNota.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtNota.setBackground(Color.WHITE);
+        txtNota.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 1));
         getContentPane().add(txtNota);
 
         JTextField txtPonderacion = new JTextField();
-        txtPonderacion.setBounds(894, 69, 100, 30);
+        txtPonderacion.setBounds(894, 69, 100, 32);
         txtPonderacion.setText("Ponderación");
+        txtPonderacion.setFont(new Font("Arial", Font.PLAIN, 13));
+        txtPonderacion.setBackground(new Color(230, 240, 250));
+        txtPonderacion.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 1));
         txtPonderacion.setEditable(false);
         getContentPane().add(txtPonderacion);
 
@@ -189,8 +205,18 @@ public class FrmEvaluacion extends JFrame {
         modelo.addColumn("Ponderación");
 
         JTable tabla = new JTable(modelo);
+        tabla.setFont(new Font("Arial", Font.PLAIN, 13));
+        tabla.setRowHeight(26);
+        tabla.setGridColor(new Color(180, 205, 225));
+        tabla.setSelectionBackground(new Color(173, 216, 230));
+        tabla.setSelectionForeground(Color.BLACK);
+        tabla.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
+        tabla.getTableHeader().setBackground(new Color(20, 33, 61));
+        tabla.getTableHeader().setForeground(Color.WHITE);
+
         JScrollPane scroll = new JScrollPane(tabla);
         scroll.setBounds(40, 160, 930, 220);
+        scroll.setBorder(BorderFactory.createLineBorder(new Color(20, 33, 61), 2));
         getContentPane().add(scroll);
 
         for (Evaluacion ev : Datos.listaEvaluaciones) {
@@ -216,19 +242,43 @@ public class FrmEvaluacion extends JFrame {
         }
 
         JButton btnAgregar = new JButton("Agregar");
-        btnAgregar.setBounds(260, 400, 100, 30);
+        btnAgregar.setBounds(260, 400, 100, 32);
+        btnAgregar.setBackground(new Color(46, 139, 87));
+        btnAgregar.setForeground(Color.WHITE);
+        btnAgregar.setFont(new Font("Arial", Font.BOLD, 13));
+        btnAgregar.setOpaque(true);
+        btnAgregar.setContentAreaFilled(true);
+        btnAgregar.setBorderPainted(false);
         getContentPane().add(btnAgregar);
 
         JButton btnEliminar = new JButton("Eliminar");
-        btnEliminar.setBounds(390, 400, 100, 30);
+        btnEliminar.setBounds(390, 400, 100, 32);
+        btnEliminar.setBackground(new Color(220, 20, 60));
+        btnEliminar.setForeground(Color.WHITE);
+        btnEliminar.setFont(new Font("Arial", Font.BOLD, 13));
+        btnEliminar.setOpaque(true);
+        btnEliminar.setContentAreaFilled(true);
+        btnEliminar.setBorderPainted(false);
         getContentPane().add(btnEliminar);
 
         JButton btnLimpiar = new JButton("Limpiar");
-        btnLimpiar.setBounds(520, 400, 100, 30);
+        btnLimpiar.setBounds(520, 400, 100, 32);
+        btnLimpiar.setBackground(new Color(70, 130, 180));
+        btnLimpiar.setForeground(Color.WHITE);
+        btnLimpiar.setFont(new Font("Arial", Font.BOLD, 13));
+        btnLimpiar.setOpaque(true);
+        btnLimpiar.setContentAreaFilled(true);
+        btnLimpiar.setBorderPainted(false);
         getContentPane().add(btnLimpiar);
 
         JButton btnRegresar = new JButton("↩");
-        btnRegresar.setBounds(650, 400, 70, 30);
+        btnRegresar.setBounds(650, 400, 70, 32);
+        btnRegresar.setBackground(new Color(20, 33, 61));
+        btnRegresar.setForeground(Color.WHITE);
+        btnRegresar.setFont(new Font("Arial", Font.BOLD, 15));
+        btnRegresar.setOpaque(true);
+        btnRegresar.setContentAreaFilled(true);
+        btnRegresar.setBorderPainted(false);
         getContentPane().add(btnRegresar);
 
         btnAgregar.addActionListener(e -> {
