@@ -2,6 +2,8 @@ package vista;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.Color;
+import java.awt.Font;
 
 import modelo.Datos;
 import modelo.Evaluacion;
@@ -19,12 +21,14 @@ public class FrmReportes extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
         getContentPane().setBackground(
-                new java.awt.Color(240, 248, 255));
+                new Color(240, 248, 255));
 
         JLabel lblTitulo =
                 new JLabel("REPORTE DE EVALUACIONES");
 
-        lblTitulo.setBounds(350, 20, 300, 30);
+        lblTitulo.setBounds(325, 20, 400, 30);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
+        lblTitulo.setForeground(new Color(20, 33, 61));
 
         add(lblTitulo);
 
@@ -42,11 +46,23 @@ public class FrmReportes extends JFrame {
                 new DefaultTableModel(null, columnas);
 
         JTable tabla = new JTable(modelo);
+        tabla.setFont(new Font("Arial", Font.PLAIN, 13));
+        tabla.setRowHeight(26);
+        tabla.setGridColor(new Color(180, 205, 225));
+        tabla.setSelectionBackground(new Color(173, 216, 230));
+        tabla.setSelectionForeground(Color.BLACK);
+        tabla.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
+        tabla.getTableHeader().setBackground(new Color(20, 33, 61));
+        tabla.getTableHeader().setForeground(Color.WHITE);
 
         JScrollPane scroll =
                 new JScrollPane(tabla);
 
         scroll.setBounds(30, 80, 920, 280);
+        scroll.setBorder(
+                BorderFactory.createLineBorder(
+                        new Color(20, 33, 61),
+                        2));
 
         add(scroll);
 
@@ -173,6 +189,12 @@ public class FrmReportes extends JFrame {
                 new JButton("Cerrar");
 
         btnCerrar.setBounds(420, 390, 120, 35);
+        btnCerrar.setBackground(new Color(20, 33, 61));
+        btnCerrar.setForeground(Color.WHITE);
+        btnCerrar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnCerrar.setOpaque(true);
+        btnCerrar.setContentAreaFilled(true);
+        btnCerrar.setBorderPainted(false);
 
         add(btnCerrar);
 
