@@ -5,6 +5,7 @@ import Persistencia.PersistenciaCursos;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import modelo.*;
@@ -29,43 +30,63 @@ public class FormCurso extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
 
-        getContentPane().setBackground(new Color(240, 248, 255));
+        // Fondo principal
+        getContentPane().setBackground(new Color(225, 239, 255));
 
         JLabel lblTitulo = new JLabel("GESTION DE CURSOS");
-        lblTitulo.setBounds(150, 10, 350, 40);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setBounds(130, 10, 350, 40);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
+        lblTitulo.setForeground(new Color(25, 25, 112));
         add(lblTitulo);
 
         JLabel lblCodigo = new JLabel("Código:");
         lblCodigo.setBounds(50, 70, 150, 30);
+        lblCodigo.setFont(new Font("Arial", Font.BOLD, 15));
+        lblCodigo.setForeground(new Color(0, 51, 102));
         add(lblCodigo);
 
         JLabel lblNombre = new JLabel("Nombre:");
         lblNombre.setBounds(50, 120, 150, 30);
+        lblNombre.setFont(new Font("Arial", Font.BOLD, 15));
+        lblNombre.setForeground(new Color(0, 51, 102));
         add(lblNombre);
 
         JLabel lblCarrera = new JLabel("Carrera:");
         lblCarrera.setBounds(50, 170, 150, 30);
+        lblCarrera.setFont(new Font("Arial", Font.BOLD, 15));
+        lblCarrera.setForeground(new Color(0, 51, 102));
         add(lblCarrera);
 
         JLabel lblCupo = new JLabel("Cupo:");
         lblCupo.setBounds(50, 220, 150, 30);
+        lblCupo.setFont(new Font("Arial", Font.BOLD, 15));
+        lblCupo.setForeground(new Color(0, 51, 102));
         add(lblCupo);
 
         txtCodigo = new JTextField();
         txtCodigo.setBounds(180, 70, 250, 30);
+        txtCodigo.setBackground(Color.WHITE);
+        txtCodigo.setBorder(new LineBorder(new Color(30, 144, 255), 2));
         add(txtCodigo);
 
         txtNombre = new JTextField();
         txtNombre.setBounds(180, 120, 250, 30);
+        txtNombre.setBackground(Color.WHITE);
+        txtNombre.setBorder(new LineBorder(new Color(30, 144, 255), 2));
         add(txtNombre);
 
         txtCupo = new JTextField();
         txtCupo.setBounds(180, 220, 250, 30);
+        txtCupo.setBackground(Color.WHITE);
+        txtCupo.setBorder(new LineBorder(new Color(30, 144, 255), 2));
         add(txtCupo);
 
         cbCarrera = new JComboBox<>();
         cbCarrera.setBounds(180, 170, 250, 30);
+        cbCarrera.setBackground(Color.WHITE);
+        cbCarrera.setForeground(new Color(0, 51, 102));
+        cbCarrera.setBorder(new LineBorder(new Color(30, 144, 255), 2));
+
         cbCarrera.addItem("Seleccione");
         cbCarrera.addItem("Ingeniería en Sistemas");
         cbCarrera.addItem("Derecho");
@@ -86,6 +107,28 @@ public class FormCurso extends JFrame implements ActionListener {
         btnLimpiar.setBounds(390, 300, 100, 40);
         btnMenu.setBounds(220, 360, 100, 40);
 
+        // ===== DISEÑO BOTONES =====
+
+        btnGuardar.setBackground(new Color(46, 204, 113));
+        btnGuardar.setForeground(Color.WHITE);
+        btnGuardar.setFont(new Font("Arial", Font.BOLD, 14));
+
+        btnEditar.setBackground(new Color(52, 152, 219));
+        btnEditar.setForeground(Color.WHITE);
+        btnEditar.setFont(new Font("Arial", Font.BOLD, 14));
+
+        btnEliminar.setBackground(new Color(231, 76, 60));
+        btnEliminar.setForeground(Color.WHITE);
+        btnEliminar.setFont(new Font("Arial", Font.BOLD, 14));
+
+        btnLimpiar.setBackground(new Color(241, 196, 15));
+        btnLimpiar.setForeground(Color.BLACK);
+        btnLimpiar.setFont(new Font("Arial", Font.BOLD, 14));
+
+        btnMenu.setBackground(new Color(155, 89, 182));
+        btnMenu.setForeground(Color.WHITE);
+        btnMenu.setFont(new Font("Arial", Font.BOLD, 14));
+
         add(btnGuardar);
         add(btnEditar);
         add(btnEliminar);
@@ -97,6 +140,21 @@ public class FormCurso extends JFrame implements ActionListener {
         );
 
         tablaCursos = new JTable(modeloTabla);
+
+        // ===== DISEÑO TABLA =====
+
+        tablaCursos.setBackground(Color.WHITE);
+        tablaCursos.setForeground(Color.BLACK);
+        tablaCursos.setSelectionBackground(new Color(52, 152, 219));
+        tablaCursos.setSelectionForeground(Color.WHITE);
+
+        tablaCursos.getTableHeader().setBackground(new Color(25, 25, 112));
+        tablaCursos.getTableHeader().setForeground(Color.WHITE);
+        tablaCursos.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+
+        tablaCursos.setRowHeight(25);
+        tablaCursos.setFont(new Font("Arial", Font.PLAIN, 13));
+
         JScrollPane scroll = new JScrollPane(tablaCursos);
         scroll.setBounds(20, 430, 550, 140);
         add(scroll);
