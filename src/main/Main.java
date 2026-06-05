@@ -1,10 +1,9 @@
 package main;
 
-import Persistencia.PersistenciaCursos;
-import Persistencia.PersistenciaEstudiantes;
-import Persistencia.PersistenciaInscripciones;
-import Persistencia.PersistenciaEvaluaciones;
-
+import persistencia.PersistenciaCursos;
+import persistencia.PersistenciaEstudiantes;
+import persistencia.PersistenciaEvaluaciones;
+import persistencia.PersistenciaInscripciones;
 import vista.FrmPrincipal;
 
 public class Main {

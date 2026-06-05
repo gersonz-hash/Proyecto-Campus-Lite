@@ -1,11 +1,10 @@
 package vista;
 
-import Persistencia.PersistenciaInscripciones;
-
 import modelo.Cursos;
 import modelo.Datos;
 import modelo.Estudiante;
 import modelo.Inscripcion;
+import persistencia.PersistenciaInscripciones;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

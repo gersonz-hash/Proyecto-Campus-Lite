@@ -1,7 +1,5 @@
 package vista;
 
-import Persistencia.PersistenciaCursos;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -9,6 +7,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import modelo.*;
+import persistencia.PersistenciaCursos;
 
 public class FormCurso extends JFrame implements ActionListener {
 

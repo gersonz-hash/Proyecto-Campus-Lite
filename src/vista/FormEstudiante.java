@@ -1,6 +1,5 @@
 package vista;
 
-import Persistencia.PersistenciaEstudiantes;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -11,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 import modelo.Datos;
 import modelo.Estudiante;
+import persistencia.PersistenciaEstudiantes;
 
 public class FormEstudiante extends JFrame implements ActionListener {
 

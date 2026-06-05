@@ -4,10 +4,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-import Persistencia.PersistenciaCursos;
-import Persistencia.PersistenciaEstudiantes;
-import Persistencia.PersistenciaEvaluaciones;
 import modelo.*;
+import persistencia.PersistenciaCursos;
+import persistencia.PersistenciaEstudiantes;
+import persistencia.PersistenciaEvaluaciones;
 
 public class FrmEvaluacion extends JFrame {
 
